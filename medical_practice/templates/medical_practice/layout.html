@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Medical Practice{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'medical_practice/styles.css' %}" rel="stylesheet">
+        <script src="{% static 'medical_practice/medical_practice.js' %}"></script>
+    </head>
+    <body>
+        <header>
+            <div class="nav-container">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="#">Capstone Health</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                      <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" href="{% url 'services' %}">Services</a>
+                        <a class="nav-item nav-link" href="{% url 'team' %}">Team</a>
+                        <a class="nav-item nav-link" href="{% url 'practice-information' %}">Practice Information</a>
+                        <a class="nav-item nav-link" href="{% url 'billing' %}">Billing???</a>
+                        <a class="nav-item nav-link" href="{% url 'contact' %}">Contact Us</a>
+                      </div>
+                    </div>
+                  </nav>
+            </div>
+        </header>
+        <main>        
+            {% block body %}
+            {% endblock %}
+        </main>
+        <footer id="practice-summary">
+            <div class="span-3-cols">
+                <div class="footer-book">
+                    <h5>Book and Appointment</h5>
+                    <p>Book an appointment at Capstone Health.</p>
+                    <p>See up to fate availability and book instantly.</p>
+                    <button>Book Appointment</button>
+                </div>
+                <div class="footer-contact">
+                    <h5>Contact Information</h5>
+                    <p>Phone: (00) 1234 5678</p>
+                    <p>Email: reception@capstonehealth.com</p>
+                    <p>Monday-Friday: 8am - 5pm</p>
+                    <p>Saturday/Sunday: Closed</p>
+                </div>
+                <div class="footer-location">
+                    <h5>Find Us</h5>
+                    <p>123 Fake Street</p>
+                    INSERT GOOGLE MAPS MODULES
+                </div>
+            </div>
+        </footer>
+        <footer id="copyright">
+            <small>Copyright © 2023 Jae Hosking.</small>
+        </footer>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+</html>

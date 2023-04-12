@@ -1,0 +1,108 @@
+main, footer#practice-summary {
+    max-width: 80%;
+    margin: auto;
+}
+
+.navbar {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+footer#copyright {
+    text-align:center;
+    padding: 5px;
+    background-color: hsl(180, 6%, 83%);
+    color: #000;
+}
+
+#container.span-2-cols {
+    border: 2px solid hsl(180, 6%, 83%);
+    border-radius: 20px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.span-2-cols {
+    display: grid;
+    grid-template-columns: 0.3fr 0.7fr;
+    /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
+    gap: 1.5rem;
+}
+
+.span-3-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
+    gap: 1.5rem;
+}
+
+.services ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: hsl(180, 6%, 83%);
+}
+
+.services li {
+    position: relative;
+    font-size: 1.1rem;
+    padding: 5px 0px 5px 10px;
+}
+
+.services li.selected, .services li:hover {
+    background: white;
+    border-radius:  10px 0 0 10px;
+}
+
+.services li.selected::before, .services li:hover::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    /* background: red; */
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 10px 0 0 white;
+}
+
+.services li.selected::after, .services li:hover::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border-top-right-radius: 10px;
+    box-shadow: 0 -10px 0 0 white;
+}
+
+.service-description {
+    padding: 10px 10px 10px 0px;
+}
+
+.team-member-container {
+    background-image: linear-gradient(white, hsla(180, 6%, 83%, 0.2));
+}
+
+.team-member-photo {
+    margin: 0 auto;
+}
+.team-member-name {
+    font-size: 1.3rem;
+}
+
+.team-member-languages {
+    font-weight: bold;
+}
+
+.clinic-details.span-2-cols {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.map {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    background: red;
+}
