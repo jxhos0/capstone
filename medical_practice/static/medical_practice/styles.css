@@ -62,7 +62,6 @@ footer#copyright {
     right: 0;
     width: 20px;
     height: 20px;
-    /* background: red; */
     border-bottom-right-radius: 10px;
     box-shadow: 0 10px 0 0 white;
 }
@@ -89,6 +88,7 @@ footer#copyright {
 .team-member-photo {
     margin: 0 auto;
 }
+
 .team-member-name {
     font-size: 1.3rem;
 }
@@ -105,4 +105,32 @@ footer#copyright {
     width: 100%;
     aspect-ratio: 2 / 1;
     background: red;
+}
+
+.dates {
+    font-weight: bold;
+    text-align: center;
+}
+
+.timeslot {
+    display: block;
+    text-align: center;
+    padding: 2px 5px;
+    margin: 6px 6px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+.timeslot.hidden {
+    display: none;
+}
+
+.timeslot:hover {
+    background: hsla(180, 6%, 83%, 0.5);
+}
+
+.load_more_rows {
+    display: block;
+    text-align: center;
+    font-weight: bold;
 }

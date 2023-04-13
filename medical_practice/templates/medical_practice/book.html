@@ -2,6 +2,29 @@
 
 {% block body %}
 
-<p>Book</p>    
+<h4>Book</h4>   
+
+<div id="container-booking">
+    {% for doctor in doctors %}
+        <div class="doctor-schedule span-2-cols" data-doctor_id="{{ doctor.id }}">
+            <div class="doctor-overview">
+                <h6>Dr {{ doctor.first_name }} {{ doctor.last_name }}</h6>
+            </div>
+            <div class="availability">
+                <table>
+                    <tr class="dates">
+                    </tr>
+                    <tr class="timeslots">
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <p class="load_more_rows">Load More</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 
 {% endblock %}

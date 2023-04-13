@@ -28,7 +28,10 @@ def contact(request):
     return render(request, "medical_practice/contact.html")
 
 def book(request):
-    return render(request, "medical_practice/book.html")
+    doctors = Doctor.objects.all()
+    return render(request, "medical_practice/book.html", {
+        "doctors" : doctors
+    })
 
 def billing(request):
     return render(request, "medical_practice/billing.html")

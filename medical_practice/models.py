@@ -42,3 +42,7 @@ class Doctor(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name}, Qualifications: {self.qualifications}'
 
+# class Appointment(models.Model):
+#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='patient')
+#     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+  
