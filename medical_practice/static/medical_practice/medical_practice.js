@@ -79,7 +79,7 @@ function load_availability() {
                 ${(dateToday.getDate() + i).toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}
             </td>
             `
-
+            
             var times = '';
             for(var j = 540; j<= 1020; j+= 15){
                 hours = Math.floor(j/ 60);

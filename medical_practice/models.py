@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
+
+from datetime import timedelta
 # from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
@@ -40,9 +42,30 @@ class Doctor(models.Model):
     summary         = models.TextField(max_length=2000, blank=False, null=False)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}, Qualifications: {self.qualifications}'
+        return f'Doctor ID: {self.id}, {self.first_name} {self.last_name}, Qualifications: {self.qualifications}'
 
+class DoctorSchedule(models.Model):
+    daysOfWeek = [
+        ('Sun', 'Sunday'),
+        ('Mon', 'Monday'),
+        ('Tue', 'Tuesday'),
+        ('Wed', 'Wednesday'),
+        ('Thu', 'Thursday'),
+        ('Fri', 'Friday'),
+        ('Sat', 'Saturday'),
+    ]
+
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='doctor')
+    day = models.CharField(max_length=10, choices=daysOfWeek, blank=True)
+    start_time = models.TimeField(blank=True, null=True)
+    lunch_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f'Dr {self.doctor.last_name} available {self.day} from {self.start_time} till {self.end_time}'
 # class Appointment(models.Model):
 #     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='patient')
 #     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
   
+# DoctorSchedule.objects.create(doctor=Doctor.objects.get(pk=1), day='Wed', start_time=datetime.time(9, 0, 0), lunch=datetime.time(13, 0, 0), shift_duration=8)
+
