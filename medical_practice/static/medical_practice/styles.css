@@ -112,6 +112,10 @@ footer#copyright {
     text-align: center;
 }
 
+.timeslots td {
+    vertical-align: top;
+}
+
 .timeslot {
     display: block;
     text-align: center;

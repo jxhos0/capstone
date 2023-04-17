@@ -26,7 +26,7 @@ class Patient(models.Model):
     last_name   = models.CharField(max_length=32, blank=False, null=False)
     gender      = models.CharField(max_length=10, blank=False, null=True)
     dob         = models.DateField(max_length=8, blank=False, null=False)
-    phone       = models.CharField(max_length=16, validators=[RegexValidator(r'^\d{3}-\d{3}-\d{4}$')], blank=False, null=False)
+    phone       = models.CharField(max_length=16, validators=[RegexValidator(r'^\d{3}-\d{3}-\d{4}$')], blank=False, null=False)   #change regex here
     email       = models.EmailField(max_length=254)
 
     def __str__(self) :
@@ -46,26 +46,41 @@ class Doctor(models.Model):
 
 class DoctorSchedule(models.Model):
     daysOfWeek = [
-        ('Sun', 'Sunday'),
-        ('Mon', 'Monday'),
-        ('Tue', 'Tuesday'),
-        ('Wed', 'Wednesday'),
-        ('Thu', 'Thursday'),
-        ('Fri', 'Friday'),
-        ('Sat', 'Saturday'),
+        ('0', 'Sunday'),
+        ('1', 'Monday'),
+        ('2', 'Tuesday'),
+        ('3', 'Wednesday'),
+        ('4', 'Thursday'),
+        ('5', 'Friday'),
+        ('6', 'Saturday'),
     ]
 
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='doctor')
-    day = models.CharField(max_length=10, choices=daysOfWeek, blank=True)
-    start_time = models.TimeField(blank=True, null=True)
-    lunch_time = models.TimeField(blank=True, null=True)
-    end_time = models.TimeField(blank=True, null=True)
+    doctor      = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='doctor')
+    day         = models.CharField(max_length=10, choices=daysOfWeek, blank=True)
+    start_time  = models.TimeField(blank=True, null=True)
+    lunch_time  = models.TimeField(blank=True, null=True)
+    end_time    = models.TimeField(blank=True, null=True)
 
     def __str__(self):
-        return f'Dr {self.doctor.last_name} available {self.day} from {self.start_time} till {self.end_time}'
-# class Appointment(models.Model):
-#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='patient')
-#     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+        return f'Dr {self.doctor.last_name} available {self.daysOfWeek[int(self.day)][1]} from {self.start_time} till {self.end_time}, {"has lunch" if self.lunch_time else ""}'
+    
+    def serialize(self):
+        return {
+            "doctor"        : self.doctor.id,
+            "day"           : int(self.day),
+            "start_time"    : self.start_time,
+            "lunch_time"    : self.lunch_time,
+            "end_time"      : self.end_time
+        }
+    
+class Appointment(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='patient')
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='booked_doctor')
+    date = models.DateField(max_length=8, blank=False, null=False)
+    time = models.TimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.patient.first_name} booked with Dr {self.doctor.last_name}, on {self.date} at {self.time}'
   
 # DoctorSchedule.objects.create(doctor=Doctor.objects.get(pk=1), day='Wed', start_time=datetime.time(9, 0, 0), lunch=datetime.time(13, 0, 0), shift_duration=8)
 

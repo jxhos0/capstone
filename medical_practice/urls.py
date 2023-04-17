@@ -11,5 +11,7 @@ urlpatterns = [
     path("billing", views.billing, name="billing"),
 
     # API Routes
-    path("service/<int:service_id>", views.load_service, name="load_service")
+    path("service/<int:service_id>", views.load_service, name="load_service"),
+    path("doctor/schedule", views.load_doctor_schedule, name="load_doctor_schedule"),
+    path("bookings", views.load_booking_timeslots, name="bookings"),
 ]
