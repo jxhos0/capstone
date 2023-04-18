@@ -18,10 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 var doctor = load.closest('.doctor-schedule').dataset.doctor_id;
                 let doctor_schedule = document.querySelector(`[data-doctor_id='${doctor}']`);
                 
+                doctor_schedule.querySelector('.timeslots').classList.add('scrollable')
+
                 doctor_schedule.querySelectorAll('.timeslot.hidden').forEach(element => {
                     element.classList.remove('hidden');
                 })
-                doctor_schedule.querySelector('.timeslots').classList.add('scrollable')
+                
 
                 load.style.display = 'none';
             });
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.icon').forEach(icon => {
             icon.addEventListener('click', () => {
                 var doctor = icon.closest('.doctor-schedule').dataset.doctor_id;
-                var start_date = new Date(document.querySelectorAll('.timeslots td')[0].dataset.date);
+                var start_date = new Date(document.querySelectorAll('.timeslots .col')[0].dataset.date);
                 // console.log(start_date)
                 // console.log(`clicked on ${doctor} table`)
 
@@ -160,10 +162,10 @@ function render_bookings(data) {
 
             // Set the HTML of the dates row showing dates and days
             datesHTML += `
-            <td>
+            <div class="col">
                 ${days[col_day]}<br>
                 ${date_string}/${month_string}
-            </td>
+            </div>
             `;
 
             // Create empty times variable
@@ -189,9 +191,9 @@ function render_bookings(data) {
 
             // Set the HTML for each days available booking HTML elements for the doctor, assigning date data.
             timesHTML += `
-            <td data-date="${col_date.getFullYear()}-${month_string}-${date_string}">
+            <div class="col" data-date="${col_date.getFullYear()}-${month_string}-${date_string}">
                 ${times}
-            </td>
+            </div>
             `;
         };
 

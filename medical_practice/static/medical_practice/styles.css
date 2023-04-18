@@ -112,7 +112,6 @@ footer#copyright {
     justify-content: end;
     gap: 2px;
     right: 0px;
-
 }
 
 .icon {
@@ -125,19 +124,27 @@ footer#copyright {
     cursor: pointer;
 }
 
-table {
-    width: 100%;
-}
-
 .dates {
+    display: flex;
     font-weight: bold;
     text-align: center;
 }
 
-table tr td {
+.timeslots {
+    display: flex;
+}
+
+.timeslots.scrollable {
+    display: flex;
+    height: calc(8 * 2.3rem);
+    overflow: auto;
+}
+
+.col {
     vertical-align: top;
     max-width: 200px;
     width: calc(100% / 5);
+    padding: 0;
 }
 
 .timeslot {
