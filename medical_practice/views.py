@@ -72,14 +72,16 @@ def load_booking_timeslots(request, date_string):
     schedules = DoctorSchedule.objects.all()
 
     appointments = Appointment.objects.filter(date__gte=timezone.now(), date__lte=timezone.now() + timedelta(days = 4))
+    # print(appointments)
 
     bookings = {}
 
     # today = date.today()
     inputDate = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%f%z').date()
-    # print(today)
+    # print(inputDate + timedelta(days = 4))
     inputDay = inputDate.weekday() + 1  if inputDate.weekday() + 1 < 7 else inputDate.weekday() + 1 - 7 # Add one to keep with js assignment of day integers
-    # print(today + timedelta(days=4))
+    # print(inputDay)
+    # print((inputDate + timedelta(days = 4)).weekday() + 1)
 
     dates =[]
     for i in range(5):
@@ -92,7 +94,8 @@ def load_booking_timeslots(request, date_string):
         for i in range(0, 5):
             selectedDate = inputDate + timedelta(days=i)
             # print(selectedDate)
-            selectedDay = inputDay + i
+            selectedDay = inputDay + i if inputDay + i < 7 else inputDay + i - 7
+            # print(selectedDay)
             daily_schedules = doctor_schedule.filter(day=selectedDay)
             dailyAppointments = appointments.filter(doctor=doctor, date=selectedDate)
                       
@@ -114,6 +117,7 @@ def load_booking_timeslots(request, date_string):
                 doctor_bookings.append(daily_bookings)
 
         bookings[doctor.id] = doctor_bookings
+
     # print(bookings)
     return JsonResponse({"dates" : dates, "bookings" : bookings}, safe=False)
             

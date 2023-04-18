@@ -21,8 +21,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 doctor_schedule.querySelectorAll('.timeslot.hidden').forEach(element => {
                     element.classList.remove('hidden');
                 })
+                doctor_schedule.querySelector('.timeslots').classList.add('scrollable')
 
-                load.innerHTML = '';
+                load.style.display = 'none';
             });
         }); 
 

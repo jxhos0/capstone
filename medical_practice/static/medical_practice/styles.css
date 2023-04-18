@@ -134,7 +134,7 @@ table {
     text-align: center;
 }
 
-.timeslots td {
+table tr td {
     vertical-align: top;
     max-width: 200px;
     width: calc(100% / 5);
