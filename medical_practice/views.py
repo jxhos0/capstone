@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from django.http import JsonResponse
 
-from datetime import date, time, timedelta
+from datetime import date, time, timedelta, datetime
 
 from .models import *
 # Create your views here.
@@ -64,8 +64,9 @@ def load_doctor_schedule(request):
     return JsonResponse([schedule.serialize() for schedule in schedules], safe=False)
 
 
-def load_booking_timeslots(request):
-
+def load_booking_timeslots(request, date_string):
+    # print(type(date_string))
+    # print(datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%f%z').date())
     doctors = Doctor.objects.all()
 
     schedules = DoctorSchedule.objects.all()
@@ -74,17 +75,24 @@ def load_booking_timeslots(request):
 
     bookings = {}
 
-    today = date.today()
-    dayToday = today.weekday() + 1  if today.weekday() + 1 < 7 else today.weekday() + 1 - 7 # Add one to keep with js assignment of day integers
+    # today = date.today()
+    inputDate = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%f%z').date()
+    # print(today)
+    inputDay = inputDate.weekday() + 1  if inputDate.weekday() + 1 < 7 else inputDate.weekday() + 1 - 7 # Add one to keep with js assignment of day integers
     # print(today + timedelta(days=4))
+
+    dates =[]
+    for i in range(5):
+        dates.append(inputDate + timedelta(days=i))
 
     for doctor in doctors:
         # print(doctor)
         doctor_schedule = schedules.filter(doctor=doctor)
         doctor_bookings = []
         for i in range(0, 5):
-            selectedDate = today + timedelta(days=i)
-            selectedDay = dayToday + i
+            selectedDate = inputDate + timedelta(days=i)
+            # print(selectedDate)
+            selectedDay = inputDay + i
             daily_schedules = doctor_schedule.filter(day=selectedDay)
             dailyAppointments = appointments.filter(doctor=doctor, date=selectedDate)
                       
@@ -107,5 +115,5 @@ def load_booking_timeslots(request):
 
         bookings[doctor.id] = doctor_bookings
     # print(bookings)
-    return JsonResponse({"start_date" : today, "bookings" : bookings}, safe=False)
+    return JsonResponse({"dates" : dates, "bookings" : bookings}, safe=False)
             

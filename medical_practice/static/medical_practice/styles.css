@@ -107,6 +107,28 @@ footer#copyright {
     background: red;
 }
 
+.date-range-selectors {
+    display: flex;
+    justify-content: end;
+    gap: 2px;
+    right: 0px;
+
+}
+
+.icon {
+    width: 2rem;
+    height: 1.5rem;
+    border: 1px solid black;
+    border-radius: .2rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+}
+
 .dates {
     font-weight: bold;
     text-align: center;
@@ -114,6 +136,8 @@ footer#copyright {
 
 .timeslots td {
     vertical-align: top;
+    max-width: 200px;
+    width: calc(100% / 5);
 }
 
 .timeslot {
@@ -125,7 +149,7 @@ footer#copyright {
     border-radius: 3px;
 }
 
-.timeslot.hidden {
+.hidden {
     display: none;
 }
 
