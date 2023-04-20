@@ -9,6 +9,7 @@ urlpatterns = [
     path("contact", views.contact, name="contact"),
     path("book", views.book, name="book"),
     path("billing", views.billing, name="billing"),
+    path("login", views.login, name="login"),
 
     # API Routes
     path("service/<int:service_id>", views.load_service, name="load_service"),

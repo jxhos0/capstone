@@ -1,13 +1,41 @@
+import json
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils import timezone
+from django.contrib.auth import authenticate, login, logout
 
 from django.http import JsonResponse
 
 from datetime import date, time, timedelta, datetime
 
 from .models import *
-# Create your views here.
+def login(request):
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+        print(data['first_name'])
+        # Attempt to sign user in
+        first_name = data['first_name']
+        last_name = data['last_name']
+        # user = authenticate(request, first_name=first_name, last_name=last_name)
+        patient = Patient.objects.filter(first_name=first_name, last_name=last_name)
+        print(patient)
+
+        # Check if authentication successful
+        if patient.count() > 0:
+            # print('patient found')
+            return HttpResponse(status=204)
+            # login(request, user)
+            # return HttpResponseRedirect(reverse("index"))
+        else:
+            print('no patient')
+            return HttpResponse(status=401)
+            # return render(request, "network/login.html", {
+            #     "message": "Invalid username and/or password."
+            # })
+    # else:
+    #     return render(request, "network/login.html")
+    
 def index(request):
     return render(request, "medical_practice/index.html")
 

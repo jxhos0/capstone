@@ -32,6 +32,100 @@
         <main>        
             {% block body %}
             {% endblock %}
+
+            <dialog id="booking-modal">
+                <div class="booking-confirmation-header">
+                    <div class="dialog-controls">
+                        <div class="back-dialog">Back</div>
+                        <div class="close-dialog">Close X</div>
+                    </div>
+                    <div class="appointment-details span-2-cols">
+                        <div class="team-member-photo">INSERT IMAGE</div>
+                        <div>
+                            <div class="appointment-doctor"></div>
+                            <div class="appointment-date-time"></div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="dialog-main">
+                    <div class="patient-type">
+                        <h3>Have you been seen at this </h3>
+                        <br>
+                        <button id="existing-patient">Existing Patient</button>
+                        <br><br>
+                        <button id="new-patient">New Patient</button>
+                    </div>
+                    <div class="existing-patient">
+                        <form id="login"  method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input id="first_name" autofocus class="form-control" type="text" name="first_name" placeholder="First name">
+                            </div>
+                            <div class="form-group">
+                                <input id="last_name" class="form-control" type="text" name="last_name" placeholder="Last name">
+                            </div>
+                            <!-- <div class="form-group">
+                                <input class="form-control" type="text" name="username" placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" placeholder="Password">
+                            </div> -->
+                            <input class="btn btn-primary" value="Login">
+                        </form>
+                    </div>
+
+                    <div class="new-patient">
+                        {% if message %}
+                            <div>{{ message }}</div>
+                        {% endif %}
+
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <h4>Enter your details:</h4>
+                            <div class="form-group">
+                                <input class="form-control" autofocus type="text" name="first_name" placeholder="First Name">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="last_name" placeholder="Last Name">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="email" name="email" placeholder="Email Address">
+                            </div>
+                            
+                            <br>
+                            <h4>Enter your account details</h4>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="username" placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+                            </div>
+
+                            <br>
+
+                            <input class="btn btn-primary"  value="Register">
+                        </form>
+                    </div>
+
+                    <div class="confirm-booking">
+                        <h4>Please check the below booking details.</h6>
+                        <p><strong>Date:</strong> </p> <p class="selected-date"></p>
+                        <p><strong>Time:</strong> </p> <p class="selected-time"></p>
+                        <p><strong>Doctor:</strong> </p> <p class="selected-doctor"></p>
+                        <br><br>
+                        <p><strong>Additional notes:</strong> </p> <textarea name="" id="" cols="30" rows="5"></textarea>
+                        <br>
+                        <button>Confirm booking</button>
+                    </div>
+
+                </div>
+
+
+            </dialog>
         </main>
         <footer id="practice-summary">
             <div class="span-3-cols">

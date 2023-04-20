@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    // console.log(document.activeElement)
+    // document.addEventListener('keydown', function(event) {
+    //     if (event.key  === 'Tab') {
+    //         console.log(document.activeElement)
+    //     }
+        
+    // })
+
     // Check user is on services page by searching for services div
     if (document.getElementById('container-services')) {
         // Get all list elements 
@@ -23,28 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 doctor_schedule.querySelectorAll('.timeslot.hidden').forEach(element => {
                     element.classList.remove('hidden');
                 })
-                
-
+            
                 load.style.display = 'none';
             });
-        }); 
-
-        // document.querySelectorAll('.icon').addEventListener('click', () => {
-        //     var doctor = document.querySelectorAll('.icon').closest('.doctor-schedule').dataset.doctor_id;
-        //     var start_date = new Date(document.querySelectorAll('.timeslots td')[0].dataset.date);
-        //     console.log(start_date)
-        //     console.log(`clicked on ${doctor} table`)
-
-        //     if (document.querySelectorAll('.icon').id === 'next') {
-        //         document.querySelectorAll('#prev').forEach(prev => {
-        //             prev.classList.remove('hidden')
-        //             console.log(`load bookings starting ${new Date(start_date.setDate(start_date.getDate() + 5))}`)
-        //         });
-        //     } else {
-        //         console.log('prev')
-        //     }
-        // });
-        
+        });         
 
         document.querySelectorAll('.icon').forEach(icon => {
             icon.addEventListener('click', () => {
@@ -152,11 +143,12 @@ function render_bookings(data) {
 
         // Loop through the next five days
         for (i = 0; i < 5; i++) {
-            // Set the five dates and days visible on the page
+            // Set the days date and days
             var col_date = new Date(data['dates'][i]);
             var col_day = col_date.getDay();
             var month_of_col_date = col_date.getMonth() + 1
 
+            // Create a string for the date and month
             let date_string = (col_date.getDate()).toString().padStart(2, '0');
             let month_string = month_of_col_date.toString().padStart(2, '0');
 
@@ -179,9 +171,9 @@ function render_bookings(data) {
                     for (k = 0; k < doctor_booking_data[j]['times'].length; k++) {
                         // Set first six available timeslots as viewable, and the remaining as hidden
                         if (k < 6) {
-                            times += `<span class="timeslot" data-timeslot="${doctor_booking_data[j]['times'][k]}">${doctor_booking_data[j]['times'][k]}</span>`; 
+                            times += `<button class="timeslot" data-timeslot="${doctor_booking_data[j]['times'][k]}">${doctor_booking_data[j]['times'][k]}</button>`; 
                         } else {
-                            times += `<span class="timeslot hidden" data-timeslot="${doctor_booking_data[j]['times'][k]}">${doctor_booking_data[j]['times'][k]}</span>`; 
+                            times += `<button class="timeslot hidden" data-timeslot="${doctor_booking_data[j]['times'][k]}">${doctor_booking_data[j]['times'][k]}</button>`; 
                         }
                     }
                 } else {
@@ -206,19 +198,130 @@ function render_bookings(data) {
     });
 
     // Listen for clicks on the availble timeslot elements
-    document.querySelectorAll('span').forEach(timeslot => {
+    document.querySelectorAll('button.timeslot').forEach(timeslot => {
         timeslot.addEventListener('click', () =>  {
             // Get the time, date and doctor data for the booking clicked on
             var time = timeslot.dataset.timeslot;
             var date = timeslot.parentElement.dataset.date;
-            var doctor = timeslot.closest('.doctor-schedule').dataset.doctor_id;
-            console.log(`Book at ${time} on ${date} with ${doctor}?`);
+            var doctor_id = timeslot.closest('.doctor-schedule').dataset.doctor_id;
+            var doctor = document.querySelector(`[data-doctor_id='${doctor_id}']`).querySelector('.doctor-overview h6').innerText;
+            console.log(doctor)
+
+            // console.log(`Book at ${time} on ${date} with ${doctor}?`);
+
+            render_booking_confirmation_dialog(time, date, doctor_id, doctor);
+            
             // console.log(timeslot.dataset.timeslot)
             // console.log(timeslot.parentElement.dataset.date)
             // console.log(timeslot.closest('.doctor-schedule').dataset.doctor_id)
         });
     });
 };
+
+function render_booking_confirmation_dialog(time, date, doctor_id, doctor) {
+  
+
+    let dialog = document.querySelector('#booking-modal');
+
+    var recent_elements = [];
+    var current_element = dialog.querySelector('.patient-type');
+    
+
+    dialog.querySelector('.selected-date').innerText = `${date}`;
+    dialog.querySelector('.selected-time').innerText = `${time}`;
+    dialog.querySelector('.selected-doctor').innerText = `${doctor}`;
+
+    dialog.querySelector('.close-dialog').addEventListener('click', () => {
+        dialog.close();
+    });
+
+    dialog.querySelector('.back-dialog').addEventListener('click', () => {
+        current_element.style.display = 'none';
+        if (recent_elements.length === 2) {
+            dialog.querySelector('.appointment-details').style.display = 'grid';
+        };
+
+        current_element = recent_elements[recent_elements.length - 1];
+        current_element.style.display = 'block';
+
+        recent_elements.pop(recent_elements.length - 1);
+
+        if (recent_elements.length === 0) {
+            dialog.querySelector('.back-dialog').style.visibility = 'hidden';
+        };
+    
+    });
+
+
+    // let date = new Date(date)
+    
+    dialog.showModal();
+    // console.log(`Book at ${time} on ${date} with ${doctor}?`);
+    dialog.querySelector('.appointment-doctor').innerHTML = `<strong>${doctor}</strong>`;
+    dialog.querySelector('.appointment-date-time').innerHTML = `on <strong>${new Date(date).toDateString()}</strong> at <strong>${time}</strong>`;
+
+    dialog.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', () => {
+
+            current_element.style.display = 'none';
+            recent_elements.push(current_element);
+
+            current_element = dialog.querySelector(`.${button.id}`);
+            current_element.style.display = 'block';
+            
+            dialog.querySelector('.back-dialog').style.visibility = 'visible';
+
+        });
+    });
+
+    dialog.querySelector('form#login').querySelector('.btn').addEventListener('click', () => {
+        // console.log('login')
+        // console.log(dialog.querySelector('form#login').querySelector('#first_name').value)
+        fetch('/login', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode: 'same-origin',
+            body: JSON.stringify({
+                first_name: dialog.querySelector('form#login').querySelector('#first_name').value,
+                last_name: dialog.querySelector('form#login').querySelector('#last_name').value
+            })
+        })
+        .then((response) => {
+            if (response["status"] === 204) {
+                current_element.style.display = 'none';
+                recent_elements.push(current_element);
+
+                current_element = dialog.querySelector('.confirm-booking');
+
+                current_element.style.display = 'block';
+
+                dialog.querySelector('.appointment-details').style.display = 'none';
+
+                // console.log(recent_elements.innerHTML)
+            } else if (response["status"] === 401) {
+
+            };
+        });
+    });
+
+};
+
+// Function used to retrieve CSRF token. This code is from Django documentation.
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 // function load_availability() {
 //     load_doctor_schedule()

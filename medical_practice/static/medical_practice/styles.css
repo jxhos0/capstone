@@ -15,7 +15,7 @@ footer#copyright {
     color: #000;
 }
 
-#container.span-2-cols {
+#container-services.span-2-cols {
     border: 2px solid hsl(180, 6%, 83%);
     border-radius: 20px;
     padding: 0;
@@ -149,9 +149,11 @@ footer#copyright {
 
 .timeslot {
     display: block;
+    width: 95%;
     text-align: center;
     padding: 2px 5px;
-    margin: 6px 6px;
+    margin: 8px 0;
+    background: white;
     border: 1px solid black;
     border-radius: 3px;
 }
@@ -160,7 +162,7 @@ footer#copyright {
     display: none;
 }
 
-.timeslot:hover {
+.timeslot:hover, .timeslot:focus {
     background: hsla(180, 6%, 83%, 0.5);
 }
 
@@ -168,4 +170,32 @@ footer#copyright {
     display: block;
     text-align: center;
     font-weight: bold;
+}
+
+#booking-modal {
+    width: 80%;
+    height: 80%;
+    padding: 30px;
+    border-radius: 1rem;
+    margin: auto;    
+}
+
+.patient-type {
+    text-align: center;
+    justify-content: center;
+}
+
+.existing-patient, .new-patient, .confirm-booking {
+    display: none;
+}
+
+
+.dialog-controls {
+    display: flex;
+    justify-content: space-between;
+}
+
+.back-dialog {
+    visibility: hidden;
+
 }
