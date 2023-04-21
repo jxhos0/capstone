@@ -3,13 +3,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
+from django.db import IntegrityError
 
 from django.http import JsonResponse
 
 from datetime import date, time, timedelta, datetime
 
 from .models import *
-def login(request):
+def login_patient(request):
     if request.method == "POST":
 
         data = json.loads(request.body)
@@ -36,6 +37,46 @@ def login(request):
     # else:
     #     return render(request, "network/login.html")
     
+def register(request):
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+        print(data)
+
+        first_name = data["first_name"]
+        last_name = data["last_name"]
+        dob = data['dob']
+        gender = data['gender']
+        phone = data['phone_number']
+        email = data["email"]
+
+        # Ensure password matches confirmation
+        password = data["password"]
+        confirmation = data["confirmation"]
+        if password != confirmation:
+            return JsonResponse({"message": "Passwords must match!"}, status=401)
+
+        # Attempt to create new patient account
+        try:
+            patient = Patient.objects.create(first_name=first_name, 
+                                            last_name=last_name, 
+                                            dob=dob,
+                                            gender=gender,
+                                            phone=phone,
+                                            email=email, 
+                                            username=email, 
+                                            password=password,
+                                            )
+            patient.save()
+          
+        except IntegrityError:
+            return JsonResponse({"message": "An account already exists with that email."}, status=409)
+        # login(request, patient)
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=401)
+    
+
 def index(request):
     return render(request, "medical_practice/index.html")
 
@@ -148,4 +189,6 @@ def load_booking_timeslots(request, date_string):
 
     # print(bookings)
     return JsonResponse({"dates" : dates, "bookings" : bookings}, safe=False)
-            
+
+def book_appointment(request):
+    pass        

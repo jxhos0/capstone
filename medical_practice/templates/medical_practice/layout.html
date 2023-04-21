@@ -22,7 +22,7 @@
                         <a class="nav-item nav-link" href="{% url 'services' %}">Services</a>
                         <a class="nav-item nav-link" href="{% url 'team' %}">Team</a>
                         <a class="nav-item nav-link" href="{% url 'practice-information' %}">Practice Information</a>
-                        <a class="nav-item nav-link" href="{% url 'book' %}">Billing???</a>
+                        <a class="nav-item nav-link" href="{% url 'book' %}">Book Appointment</a>
                         <a class="nav-item nav-link" href="{% url 'contact' %}">Contact Us</a>
                       </div>
                     </div>
@@ -36,8 +36,8 @@
             <dialog id="booking-modal">
                 <div class="booking-confirmation-header">
                     <div class="dialog-controls">
-                        <div class="back-dialog">Back</div>
-                        <div class="close-dialog">Close X</div>
+                        <div class="back-dialog">&larr;</div>
+                        <div class="close-dialog">&#x2715</div>
                     </div>
                     <div class="appointment-details span-2-cols">
                         <div class="team-member-photo">INSERT IMAGE</div>
@@ -50,8 +50,8 @@
                 <hr>
                 <div class="dialog-main">
                     <div class="patient-type">
-                        <h3>Have you been seen at this </h3>
-                        <br>
+                        <h3>Have you been seen at Capstone Medical?</h3>
+                        <br><br>
                         <button id="existing-patient">Existing Patient</button>
                         <br><br>
                         <button id="new-patient">New Patient</button>
@@ -60,10 +60,10 @@
                         <form id="login"  method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
-                                <input id="first_name" autofocus class="form-control" type="text" name="first_name" placeholder="First name">
+                                <input id="first_name_login" autofocus class="form-control" type="text" name="first_name" placeholder="First name">
                             </div>
                             <div class="form-group">
-                                <input id="last_name" class="form-control" type="text" name="last_name" placeholder="Last name">
+                                <input id="last_name_login" class="form-control" type="text" name="last_name" placeholder="Last name">
                             </div>
                             <!-- <div class="form-group">
                                 <input class="form-control" type="text" name="username" placeholder="Username">
@@ -80,34 +80,89 @@
                             <div>{{ message }}</div>
                         {% endif %}
 
-                        <form action="" method="post" enctype="multipart/form-data">
+                        <form id="register" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <h4>Enter your details:</h4>
+                            <h4>Create Patient Account</h4>
+                            <h6>Patient Details</h6>
                             <div class="form-group">
-                                <input class="form-control" autofocus type="text" name="first_name" placeholder="First Name">
+                                <input id="first_name_register" class="form-control" autofocus type="text" name="first_name" placeholder="First Name">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" type="text" name="last_name" placeholder="Last Name">
+                                <input id="last_name_register" class="form-control" type="text" name="last_name" placeholder="Last Name">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" type="email" name="email" placeholder="Email Address">
+                                <input id="dob" class="form-control" type="text" name="dob" placeholder="Date of Birth" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}">
                             </div>
-                            
+                            <div class="form-group">
+                                <select id="gender" class="form-control" name="gender" id="gender">
+                                    <option selected disabled>Select your gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">I do not wish to answer</option>
+                                  </select>
+                            </div>
                             <br>
-                            <h4>Enter your account details</h4>
+                            <h6>Contact Details</h6>
                             <div class="form-group">
-                                <input class="form-control" type="text" name="username" placeholder="Username">
+                                <input id="phone_number" class="form-control" type="tel" name="phone_number" placeholder="Contact Number">
                             </div>
+                            <div class="form-group">
+                                <input id="email" class="form-control" type="email" name="email" placeholder="Email Address">
+                            </div>
+                            <br>
+                            <h6>Account Password</h6>
+                            <div class="form-group">
+                                <input id="password" class="form-control" type="password" name="password" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <input id="confirmation" class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+                            </div>
+                            <br>
+                            <input class="btn btn-primary" value="Create Account">
+
+
+                            <!-- <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="first_name">First Name:</label>
+                                
+                                <input class="form-control col-sm-10" autofocus type="text" name="first_name" placeholder="First Name">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="last_name">Last Name:</label>
+                                <input class="form-control  col-sm-10" type="text" name="last_name" placeholder="Last Name">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="dob">Date of Birth:</label>
+                                <input class="form-control  col-sm-10" type="text" name="dob" placeholder="Date of Birth" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="gender">Gender:</label>
+                                <select class="form-control  col-sm-10" name="gender" id="gender">
+                                    <option selected disabled>Select your gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">I do not wish to answer</option>
+                                  </select>
+                            </div>
+                            <br>
+                            <h6>Contact Details</h6>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="phone_number">Contact Number:</label>
+                                <input class="form-control  col-sm-10" type="tel" name="phone_number" placeholder="Contact Number">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="email">Email Address:</label>
+                                <input class="form-control  col-sm-10" type="email" name="email" placeholder="Email Address">
+                            </div>
+                            <br>
+                            <h6>Account Password</h6>
                             <div class="form-group">
                                 <input class="form-control" type="password" name="password" placeholder="Password">
                             </div>
                             <div class="form-group">
                                 <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
                             </div>
-
                             <br>
-
-                            <input class="btn btn-primary"  value="Register">
+                            <input class="btn btn-primary" value="Register"> -->
                         </form>
                     </div>
 
@@ -119,7 +174,7 @@
                         <br><br>
                         <p><strong>Additional notes:</strong> </p> <textarea name="" id="" cols="30" rows="5"></textarea>
                         <br>
-                        <button>Confirm booking</button>
+                        <button id="confirm-booking">Confirm booking</button>
                     </div>
 
                 </div>

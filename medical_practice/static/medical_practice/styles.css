@@ -147,13 +147,17 @@ footer#copyright {
     padding: 0;
 }
 
-.timeslot {
+button {
     display: block;
-    width: 95%;
     text-align: center;
+    margin: auto;  
+    background: white;
+}
+
+.timeslot {
+    width: 95%;
     padding: 2px 5px;
     margin: 8px 0;
-    background: white;
     border: 1px solid black;
     border-radius: 3px;
 }
@@ -167,9 +171,9 @@ footer#copyright {
 }
 
 .load_more_rows {
-    display: block;
-    text-align: center;
     font-weight: bold;
+    border: none;
+    margin: auto;
 }
 
 #booking-modal {
@@ -183,12 +187,25 @@ footer#copyright {
 .patient-type {
     text-align: center;
     justify-content: center;
+    padding-top: 10%;
+}
+
+button#existing-patient, button#new-patient {
+    width: 35%;
+    line-height: 3rem;
+    font-size: 1.5rem;
+    border-radius: 1rem;
+}
+
+button#confirm-booking {
+    width: 150px;
+    line-height: 1.5rem;
+    border-radius: .2rem;
 }
 
 .existing-patient, .new-patient, .confirm-booking {
     display: none;
 }
-
 
 .dialog-controls {
     display: flex;
@@ -199,3 +216,4 @@ footer#copyright {
     visibility: hidden;
 
 }
+
