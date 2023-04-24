@@ -14,16 +14,18 @@ def login_patient(request):
     if request.method == "POST":
 
         data = json.loads(request.body)
-        print(data['first_name'])
+        # print(data['last_name'])
         # Attempt to sign user in
         first_name = data['first_name']
         last_name = data['last_name']
         # user = authenticate(request, first_name=first_name, last_name=last_name)
-        patient = Patient.objects.filter(first_name=first_name, last_name=last_name)
-        print(patient)
+        user = User.objects.get(first_name=first_name, last_name=last_name)
+        # print(user.id)
+        # patient = Patient.objects.get(user=user)
+        # print(patient)
 
         # Check if authentication successful
-        if patient.count() > 0:
+        if user:
             # print('patient found')
             return HttpResponse(status=204)
             # login(request, user)
@@ -41,7 +43,7 @@ def register(request):
     if request.method == "POST":
 
         data = json.loads(request.body)
-        print(data)
+        # print(data)
 
         first_name = data["first_name"]
         last_name = data["last_name"]
@@ -58,20 +60,22 @@ def register(request):
 
         # Attempt to create new patient account
         try:
-            patient = Patient.objects.create(first_name=first_name, 
-                                            last_name=last_name, 
-                                            dob=dob,
-                                            gender=gender,
-                                            phone=phone,
-                                            email=email, 
-                                            username=email, 
-                                            password=password,
-                                            )
-            patient.save()
+            user = User.objects.create_user(first_name=first_name, 
+                                        last_name=last_name, 
+                                        dob=dob,
+                                        gender=gender,
+                                        phone=phone,
+                                        email=email, 
+                                        username=email, 
+                                        password=password,
+                                        )
+            user.save()
           
         except IntegrityError:
             return JsonResponse({"message": "An account already exists with that email."}, status=409)
-        # login(request, patient)
+        
+        Patient.objects.create(user=user)
+        login(request, user)
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=401)
@@ -191,4 +195,59 @@ def load_booking_timeslots(request, date_string):
     return JsonResponse({"dates" : dates, "bookings" : bookings}, safe=False)
 
 def book_appointment(request):
-    pass        
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+        # print(data)
+
+        first_name = data["first_name"]
+        last_name = data["last_name"]
+        doctor_id = data['doctor_id']
+        time = data['time']
+        date = data['date']
+
+        doctor = Doctor.objects.get(pk=doctor_id)
+
+        if checkBookingAvailability(doctor, time, date):
+            user = User.objects.get(first_name=first_name, last_name=last_name)
+            patient = Patient.objects.get(user=user)
+            
+            Appointment.objects.create(patient=patient, doctor=doctor, time=time, date=date).save()
+
+
+        # # Ensure password matches confirmation
+        # password = data["password"]
+        # confirmation = data["confirmation"]
+        # if password != confirmation:
+        #     return JsonResponse({"message": "Passwords must match!"}, status=401)
+
+        # # Attempt to create new patient account
+        # try:
+        #     user = User.objects.create(first_name=first_name, 
+        #                                 last_name=last_name, 
+        #                                 dob=dob,
+        #                                 gender=gender,
+        #                                 phone=phone,
+        #                                 email=email, 
+        #                                 # username=email, 
+        #                                 password=password,
+        #                                 )
+        #     user.save()
+          
+        # except IntegrityError:
+        #     return JsonResponse({"message": "An account already exists with that email."}, status=409)
+        # login(request, user)
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=401)      
+
+def checkBookingAvailability(doctor, time, date):
+    # print(doctor_id, time, date)
+    
+    try:
+        appointment = Appointment.objects.get(doctor=doctor, time=time, date=date)
+        return False
+    # if appointment:
+    #     print('available')
+    except Appointment.DoesNotExist:
+        return True

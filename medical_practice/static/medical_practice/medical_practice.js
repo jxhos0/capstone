@@ -225,6 +225,10 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor) {
 
     var recent_elements = [];
     var current_element = dialog.querySelector('.patient-type');
+
+    var first_name = '';
+    var last_name = '';
+    var email = '';
     
 
     dialog.querySelector('.selected-date').innerText = `${new Date(date).toDateString()}`;
@@ -254,8 +258,6 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor) {
     
     });
 
-
-    // let date = new Date(date)
     
     dialog.showModal();
     // console.log(`Book at ${time} on ${date} with ${doctor}?`);
@@ -277,85 +279,172 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor) {
     });
 
     dialog.querySelector('form#login').querySelector('.btn').addEventListener('click', () => {
-        // console.log('login')
-        // console.log(dialog.querySelector('form#login').querySelector('#first_name').value)
-        login(dialog, current_element, recent_elements);
+        first_name = dialog.querySelector('form#login').querySelector('#first_name_login').value;
+        last_name = dialog.querySelector('form#login').querySelector('#last_name_login').value
+
+        fetch('/login', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode: 'same-origin',
+            body: JSON.stringify({
+                first_name: dialog.querySelector('form#login').querySelector('#first_name_login').value,
+                last_name: dialog.querySelector('form#login').querySelector('#last_name_login').value
+            })
+        })
+        .then((response) => {
+            if (response["status"] === 204) {
+                current_element.style.display = 'none';
+                recent_elements.push(current_element);
+    
+                current_element = dialog.querySelector('.confirm-booking');
+    
+                current_element.style.display = 'block';
+    
+                dialog.querySelector('.appointment-details').style.display = 'none';
+    
+                // console.log(recent_elements.innerHTML)
+            } else if (response["status"] === 401) {
+                // INSERT ERROR MESSAGE
+            };
+        });
     });
+
     dialog.querySelector('form#register').querySelector('.btn').addEventListener('click', () => {
-        // console.log('login')
-        // console.log(dialog.querySelector('form#login').querySelector('#first_name').value)
-        register_patient(dialog, current_element, recent_elements);
-    });
-
-};
-
-function login(dialog, current_element, recent_elements) {
-    fetch('/login', {
-        method: 'POST',
-        headers: {'X-CSRFToken': getCookie('csrftoken')},
-        mode: 'same-origin',
-        body: JSON.stringify({
-            first_name: dialog.querySelector('form#login').querySelector('#first_name_login').value,
-            last_name: dialog.querySelector('form#login').querySelector('#last_name_login').value
+            first_name = dialog.querySelector('form#register').querySelector('#first_name_register').value;
+            last_name = dialog.querySelector('form#register').querySelector('#last_name_register').value;
+            
+        fetch('/register', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode: 'same-origin',
+            body: JSON.stringify({
+                first_name : dialog.querySelector('form#register').querySelector('#first_name_register').value,
+                last_name : dialog.querySelector('form#register').querySelector('#last_name_register').value,
+                dob : dialog.querySelector('form#register').querySelector('#dob').value,
+                gender : dialog.querySelector('form#register').querySelector('#gender').value,
+                phone_number : dialog.querySelector('form#register').querySelector('#phone_number').value,
+                email : dialog.querySelector('form#register').querySelector('#email').value,
+                password : dialog.querySelector('form#register').querySelector('#password').value,
+                confirmation : dialog.querySelector('form#register').querySelector('#confirmation').value,
+            })
         })
-    })
-    .then((response) => {
-        if (response["status"] === 204) {
-            current_element.style.display = 'none';
-            recent_elements.push(current_element);
-
-            current_element = dialog.querySelector('.confirm-booking');
-
-            current_element.style.display = 'block';
-
-            dialog.querySelector('.appointment-details').style.display = 'none';
-
-            // console.log(recent_elements.innerHTML)
-        } else if (response["status"] === 401) {
-            // INSERT ERROR MESSAGE
-        };
+        .then((response) => {
+            if (response["status"] === 204) {
+                current_element.style.display = 'none';
+                recent_elements.push(current_element);
+    
+                current_element = dialog.querySelector('.confirm-booking');
+    
+                current_element.style.display = 'block';
+    
+                dialog.querySelector('.appointment-details').style.display = 'none';
+    
+                // console.log(recent_elements.innerHTML)
+            } else if (response["status"] === 401) {
+                // INSERT ERROR MESSAGE
+            } else if (response["status"] === 409) {
+                // INSERT ERROR MESSAGE
+            };
+        });
     });
-};
 
-function register_patient(dialog, current_element, recent_elements) {
-    fetch('/register', {
-        method: 'POST',
-        headers: {'X-CSRFToken': getCookie('csrftoken')},
-        mode: 'same-origin',
-        body: JSON.stringify({
-            first_name : dialog.querySelector('form#register').querySelector('#first_name_register').value,
-            last_name : dialog.querySelector('form#register').querySelector('#last_name_register').value,
-            dob : dialog.querySelector('form#register').querySelector('#dob').value,
-            gender : dialog.querySelector('form#register').querySelector('#gender').value,
-            phone_number : dialog.querySelector('form#register').querySelector('#phone_number').value,
-            email : dialog.querySelector('form#register').querySelector('#email').value,
-            password : dialog.querySelector('form#register').querySelector('#password').value,
-            confirmation : dialog.querySelector('form#register').querySelector('#confirmation').value,
+    dialog.querySelector('#confirm-booking').addEventListener('click', () => {
+        console.log('book')
+        fetch('/book_appointment', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode: 'same-origin',
+            body: JSON.stringify({
+                first_name : first_name,
+                last_name : last_name,
+                // dob : dialog.querySelector('form#register').querySelector('#dob').value,
+                // gender : dialog.querySelector('form#register').querySelector('#gender').value,
+                doctor_id : doctor_id,
+                time : time,
+                date : date,
+            })
         })
+        .then((response) => {
+            if (response["status"] === 204) {
+                
+            } else if (response["status"] === 401) {
+                // INSERT ERROR MESSAGE
+            } else if (response["status"] === 409) {
+                // INSERT ERROR MESSAGE
+            };
+        });
     })
-    .then((response) => {
-        if (response["status"] === 204) {
-            current_element.style.display = 'none';
-            recent_elements.push(current_element);
-
-            current_element = dialog.querySelector('.confirm-booking');
-
-            current_element.style.display = 'block';
-
-            dialog.querySelector('.appointment-details').style.display = 'none';
-
-            // console.log(recent_elements.innerHTML)
-        } else if (response["status"] === 401) {
-            // INSERT ERROR MESSAGE
-        } else if (response["status"] === 409) {
-            // INSERT ERROR MESSAGE
-        };
-    });
-};
-
-function book_appointment(){
 
 };
+
+// function login(dialog, current_element, recent_elements) {
+//     fetch('/login', {
+//         method: 'POST',
+//         headers: {'X-CSRFToken': getCookie('csrftoken')},
+//         mode: 'same-origin',
+//         body: JSON.stringify({
+//             first_name: dialog.querySelector('form#login').querySelector('#first_name_login').value,
+//             last_name: dialog.querySelector('form#login').querySelector('#last_name_login').value
+//         })
+//     })
+//     .then((response) => {
+//         if (response["status"] === 204) {
+//             current_element.style.display = 'none';
+//             recent_elements.push(current_element);
+
+//             current_element = dialog.querySelector('.confirm-booking');
+
+//             current_element.style.display = 'block';
+
+//             dialog.querySelector('.appointment-details').style.display = 'none';
+
+//             // console.log(recent_elements.innerHTML)
+//         } else if (response["status"] === 401) {
+//             // INSERT ERROR MESSAGE
+//         };
+//     });
+// };
+
+
+// function register_patient(dialog, current_element, recent_elements) {
+//     fetch('/register', {
+//         method: 'POST',
+//         headers: {'X-CSRFToken': getCookie('csrftoken')},
+//         mode: 'same-origin',
+//         body: JSON.stringify({
+//             first_name : dialog.querySelector('form#register').querySelector('#first_name_register').value,
+//             last_name : dialog.querySelector('form#register').querySelector('#last_name_register').value,
+//             dob : dialog.querySelector('form#register').querySelector('#dob').value,
+//             gender : dialog.querySelector('form#register').querySelector('#gender').value,
+//             phone_number : dialog.querySelector('form#register').querySelector('#phone_number').value,
+//             email : dialog.querySelector('form#register').querySelector('#email').value,
+//             password : dialog.querySelector('form#register').querySelector('#password').value,
+//             confirmation : dialog.querySelector('form#register').querySelector('#confirmation').value,
+//         })
+//     })
+//     .then((response) => {
+//         if (response["status"] === 204) {
+//             current_element.style.display = 'none';
+//             recent_elements.push(current_element);
+
+//             current_element = dialog.querySelector('.confirm-booking');
+
+//             current_element.style.display = 'block';
+
+//             dialog.querySelector('.appointment-details').style.display = 'none';
+
+//             // console.log(recent_elements.innerHTML)
+//         } else if (response["status"] === 401) {
+//             // INSERT ERROR MESSAGE
+//         } else if (response["status"] === 409) {
+//             // INSERT ERROR MESSAGE
+//         };
+//     });
+// };
+
+// function book_appointment(){
+
+// };
 
 
 // Function used to retrieve CSRF token. This code is from Django documentation.

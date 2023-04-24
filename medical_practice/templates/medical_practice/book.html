@@ -8,7 +8,7 @@
     {% for doctor in doctors %}
         <div class="doctor-schedule span-2-cols" data-doctor_id="{{ doctor.id }}">
             <div class="doctor-overview">
-                <h6>Dr {{ doctor.first_name }} {{ doctor.last_name }}</h6>
+                <h6>Dr {{ doctor.user.first_name }} {{ doctor.user.last_name }}</h6>
             </div>
             <div class="availability">
                 <div class="date-range-selectors">

@@ -3,10 +3,11 @@
         <img src="" height="200px" width="200px">
     </div>
     <div class="team-member-details">
-        <div class="team-member-name">Dr {{ doctor.first_name }} {{ doctor.last_name }}</div><br>
-        <div class="team-member-qualifications">{{ doctor.gender }}, {{ doctor.qualifications }}</div><br>
+        <div class="team-member-name">Dr {{ doctor.user.first_name }} {{ doctor.user.last_name }}</div><br>
+        <div class="team-member-qualifications">{{ doctor.user.gender }}, {{ doctor.qualifications }}</div><br>
         <div class="team-member-languages">Speaks {{ doctor.languages }}</div><br>
         <div class="team-member-description">{{ doctor.summary }}</div><br>
     </div>
 </div>
 <br>
+
