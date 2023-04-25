@@ -27,7 +27,7 @@ def login_patient(request):
         # Check if authentication successful
         if user:
             # print('patient found')
-            return HttpResponse(status=204)
+            return HttpResponse(status=200)
             # login(request, user)
             # return HttpResponseRedirect(reverse("index"))
         else:
@@ -76,7 +76,7 @@ def register(request):
         
         Patient.objects.create(user=user)
         login(request, user)
-        return HttpResponse(status=204)
+        return HttpResponse(status=200)
     else:
         return HttpResponse(status=401)
     
@@ -237,17 +237,15 @@ def book_appointment(request):
         # except IntegrityError:
         #     return JsonResponse({"message": "An account already exists with that email."}, status=409)
         # login(request, user)
-        return HttpResponse(status=204)
+        return HttpResponse(status=200)
     else:
-        return HttpResponse(status=401)      
+        return HttpResponse(status=409)      
 
 def checkBookingAvailability(doctor, time, date):
-    # print(doctor_id, time, date)
     
     try:
         appointment = Appointment.objects.get(doctor=doctor, time=time, date=date)
         return False
-    # if appointment:
-    #     print('available')
+
     except Appointment.DoesNotExist:
         return True

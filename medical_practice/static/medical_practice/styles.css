@@ -104,7 +104,6 @@ footer#copyright {
 .map {
     width: 100%;
     aspect-ratio: 2 / 1;
-    background: red;
 }
 
 .date-range-selectors {
@@ -112,6 +111,10 @@ footer#copyright {
     justify-content: end;
     gap: 2px;
     right: 0px;
+}
+
+.doctor-schedule {
+    padding-bottom: 1rem;
 }
 
 .icon {
@@ -128,23 +131,23 @@ footer#copyright {
     display: flex;
     font-weight: bold;
     text-align: center;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 .timeslots {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(5, 20%);
+    border-bottom: 1px solid black;
 }
 
 .timeslots.scrollable {
-    display: flex;
     height: calc(8 * 2.3rem);
-    overflow: auto;
+    overflow: scroll;
 }
 
 .col {
     vertical-align: top;
-    max-width: 200px;
-    width: calc(100% / 5);
-    padding: 0;
 }
 
 button {
@@ -155,11 +158,12 @@ button {
 }
 
 .timeslot {
-    width: 95%;
+    width: 100%;
     padding: 2px 5px;
-    margin: 8px 0;
+    margin: 8px auto;
     border: 1px solid black;
     border-radius: 3px;
+
 }
 
 .hidden {
@@ -203,7 +207,7 @@ button#confirm-booking {
     border-radius: .2rem;
 }
 
-.existing-patient, .new-patient, .confirm-booking {
+.existing-patient, .new-patient, .confirm-booking, .confirmed-booking {
     display: none;
 }
 
@@ -216,4 +220,24 @@ button#confirm-booking {
     visibility: hidden;
 
 }
+
+iframe {
+    width: 100%;
+    height: 100%;
+}
+
+button#book-now {
+    font-size: 1.2rem;
+    width: 80%;
+    line-height: 3.6rem;
+    border-radius: 1.8rem;
+    margin-left: 5%;
+    
+}
+
+.shaded {
+    background-color: hsla(180, 6%, 83%, 20%);
+}
+
+
 

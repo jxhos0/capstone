@@ -177,6 +177,10 @@
                         <button id="confirm-booking">Confirm booking</button>
                     </div>
 
+                    <div class="confirmed-booking">
+                        <h4>Booking Confirmed!</h4>
+                    </div>
+
                 </div>
 
 
@@ -185,22 +189,33 @@
         <footer id="practice-summary">
             <div class="span-3-cols">
                 <div class="footer-book">
-                    <h5>Book an Appointment</h5>
+                    <h5>Book Appointment</h5>
+                    <br>
                     <p>Book an appointment at Capstone Health.</p>
-                    <p>See up to fate availability and book instantly.</p>
-                    <button>Book Appointment</button>
+                    <br>
+                    <p>See up to date availability and book instantly.</p>
+                    <br>
+                    <a href="{% url 'book' %}"><button id="book-now">Book Online</button></a>
                 </div>
                 <div class="footer-contact">
-                    <h5>Contact Information</h5>
+                    <h5>Contact Us</h5>
+                    <br>
+                    <h6>Contact Information</h6>
                     <p>Phone: (00) 1234 5678</p>
                     <p>Email: reception@capstonehealth.com</p>
-                    <p>Monday-Friday: 8am - 5pm</p>
-                    <p>Saturday/Sunday: Closed</p>
+                    <br>
+                    <h6>Open Hours</h6>
+                    <p>Monday to Friday: 8am - 5pm</p>
+                    <p>Weekends and Public Holidays: 8am - 2pm</p>
                 </div>
                 <div class="footer-location">
                     <h5>Find Us</h5>
-                    <p>123 Fake Street</p>
-                    INSERT GOOGLE MAPS MODULES
+                    <br>
+                    <p>123 Fake Street, Oak Lawn, IL, USA</p>
+                    <div class="map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2977.781401646108!2d-87.7512738232809!3d41.72523567125901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e3bd3bb6db18d%3A0x6582323d7a833d16!2s123%20Fake%20Street%2C%20Oak%20Lawn%2C%20IL%2060453%2C%20USA!5e0!3m2!1sen!2sar!4v1682361551488!5m2!1sen!2sar" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <br>
                 </div>
             </div>
         </footer>
