@@ -1,0 +1,58 @@
+{% extends "medical_practice/layout.html" %}
+
+{% block body %}
+    <div id="register">
+        <h2>Register</h2>
+
+        {% if message %}
+            <div>{{ message }}</div>
+        {% endif %}
+
+        <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h4>Create Patient Account</h4>
+            <h6>Patient Details</h6>
+            <div class="form-group">
+                <input id="first_name_register" class="form-control" autofocus type="text" name="first_name" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <input id="last_name_register" class="form-control" type="text" name="last_name" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+                <input id="dob" class="form-control" type="text" name="dob" placeholder="Date of Birth" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}">
+            </div>
+            <div class="form-group">
+                <select id="gender" class="form-control" name="gender" id="gender">
+                    <option selected disabled>Select your gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">I do not wish to answer</option>
+                  </select>
+            </div>
+            <br>
+            <h6>Contact Details</h6>
+            <div class="form-group">
+                <input id="phone_number" class="form-control" type="tel" name="phone_number" placeholder="Contact Number">
+            </div>
+            <div class="form-group">
+                <input id="email" class="form-control" type="email" name="email" placeholder="Email Address">
+            </div>
+            <br>
+            <h6>Account Password</h6>
+            <div class="form-group">
+                <input id="password" class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <input id="confirmation" class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+            </div>
+            <br>
+            
+
+            <input class="btn btn-primary" type="submit" value="Register">
+        </form>
+
+        Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+    </div>
+    
+
+{% endblock %}

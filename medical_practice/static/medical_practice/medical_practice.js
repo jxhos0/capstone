@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             
                 // Hide the 'Show More' button
-                load.style.display = 'none';
+                load.style.visibility = 'hidden';
             });
         });         
 
@@ -68,6 +68,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Reload new bookings
                 load_bookings(new_week_start_date);
+            });
+        });
+    } else if (document.getElementById('appointments-container')) {
+        document.querySelectorAll('.selector h5').forEach(list => {
+            list.addEventListener('click', () => {
+                if (!list.classList.contains('selected')) {
+                    document.querySelector('.selected').classList.remove('selected')
+                    list.classList.add('selected')
+
+                    if (list.innerText === 'Upcoming Appointments') {
+                        document.querySelector('.upcoming-appointments').style.display = 'block';
+                        document.querySelector('.past-appointments').style.display = 'none';
+                    } else {
+                        document.querySelector('.upcoming-appointments').style.display = 'none';
+                        document.querySelector('.past-appointments').style.display = 'block';
+                        
+                    };
+                };
             });
         });
     };
@@ -125,7 +143,7 @@ function render_bookings(data) {
             timeslots.classList.remove('scrollable');
 
             // Show the 'Show More'button
-            table.querySelector('.load_more_rows').style.display = 'block';
+            table.querySelector('.load_more_rows').style.visibility = 'visible';
         };
   
         // Set initial HTML content for the dates and timeslots table rows
@@ -160,11 +178,14 @@ function render_bookings(data) {
                 if (new Date(doctor_booking_data[j]['date']).getDate() === col_date.getDate()) {
                     // Loop through doctor booking times creating HTML elements for each
                     for (k = 0; k < doctor_booking_data[j]['times'].length; k++) {
+                        var time = doctor_booking_data[j]['times'][k];
+                        var time_ampm = ampm_time_format(time)
+
                         // Set first six available timeslots as viewable, and the remaining as hidden
                         if (k < 6) {
-                            times += `<button class="timeslot" data-timeslot="${doctor_booking_data[j]['times'][k]}">${doctor_booking_data[j]['times'][k]}</button>`; 
+                            times += `<button class="timeslot" data-timeslot="${doctor_booking_data[j]['times'][k]}">${time_ampm}</button>`; 
                         } else {
-                            times += `<button class="timeslot hidden" data-timeslot="${doctor_booking_data[j]['times'][k]}">${doctor_booking_data[j]['times'][k]}</button>`; 
+                            times += `<button class="timeslot hidden" data-timeslot="${doctor_booking_data[j]['times'][k]}">${time_ampm}</button>`; 
                         };
                     };
                 } else {
@@ -193,14 +214,16 @@ function render_bookings(data) {
             var time = timeslot.dataset.timeslot;
             var date = timeslot.parentElement.dataset.date;
             var doctor_id = timeslot.closest('.doctor-schedule').dataset.doctor_id;
-            var doctor = document.querySelector(`[data-doctor_id='${doctor_id}']`).querySelector('.doctor-overview h6').innerText;
+            var doctor = document.querySelector(`[data-doctor_id='${doctor_id}']`).querySelector('.doctor-overview h5').innerText;
+            var doctor_photo_html = document.querySelector(`[data-doctor_id='${doctor_id}']`).querySelector('.photo-container').innerHTML;
+            console.log(doctor_photo_html)
 
-            render_booking_confirmation_dialog(time, date, doctor_id, doctor);
+            render_booking_confirmation_dialog(time, date, doctor_id, doctor, doctor_photo_html);
         });
     });
 };
 
-function render_booking_confirmation_dialog(time, date, doctor_id, doctor) {
+function render_booking_confirmation_dialog(time, date, doctor_id, doctor, doctor_photo_html) {
 
     // Set dialog and back arrow HTML elements as variable s
     let dialog = document.querySelector('#booking-modal');
@@ -216,6 +239,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor) {
     var email = '';
 
     // Set the values of the dialog header HTML element
+    dialog.querySelector('.photo-container').innerHTML = `${doctor_photo_html}`
     dialog.querySelector('.appointment-doctor').innerHTML = `<strong>${doctor}</strong>`;
     dialog.querySelector('.appointment-date-time').innerHTML = `on <strong>${new Date(date).toDateString()}</strong> at <strong>${time}</strong>`;
     
@@ -482,6 +506,20 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+function ampm_time_format(time) {
+    // Get hours and minutes as seperate variables
+    hours = time.slice(0, 2)
+    minutes = time.slice(3, 5)
+
+    // Check if hour is greater than 11
+    let ampm_time = hours > 11 ? 
+                                (hours == 12 ? hours + ":" + minutes + " PM" : hours - 12 + ":" + minutes + " PM" )     // If hours are greater than 12, subtract 12 and join the hours, minutes and PM tag
+                                : hours + ":" + minutes + " AM"                                                         // Join the hours, minutes and AM tag
+
+    // Return the formatted time
+    return ampm_time
 }
 
 // function load_availability() {

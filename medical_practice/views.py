@@ -1,84 +1,135 @@
 import json
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.urls import reverse
 
 from django.http import JsonResponse
 
 from datetime import date, time, timedelta, datetime
 
+
+
+
 from .models import *
-def login_patient(request):
+def confirm_patient(request):
     if request.method == "POST":
 
         data = json.loads(request.body)
-        # print(data['last_name'])
-        # Attempt to sign user in
+
         first_name = data['first_name']
         last_name = data['last_name']
-        # user = authenticate(request, first_name=first_name, last_name=last_name)
         user = User.objects.get(first_name=first_name, last_name=last_name)
-        # print(user.id)
-        # patient = Patient.objects.get(user=user)
-        # print(patient)
+
+        if user:
+
+            return HttpResponse(status=200)
+        else:
+
+            return HttpResponse(status=401)
+
+def login_view(request):
+    if request.method == "POST":
+
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        print(username, password)
+        user = authenticate(request, username=username, password=password)
+        print(user)
 
         # Check if authentication successful
-        if user:
-            # print('patient found')
-            return HttpResponse(status=200)
-            # login(request, user)
-            # return HttpResponseRedirect(reverse("index"))
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse(f"appointments"))
         else:
-            print('no patient')
-            return HttpResponse(status=401)
-            # return render(request, "network/login.html", {
-            #     "message": "Invalid username and/or password."
-            # })
-    # else:
-    #     return render(request, "network/login.html")
+            return render(request, "medical_practice/login.html", {
+                "message": "Invalid username and/or password."
+            })
+    else:
+        return render(request, "medical_practice/login.html")
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
     
 def register(request):
     if request.method == "POST":
 
-        data = json.loads(request.body)
-        # print(data)
+        if request.POST:
+            first_name      = request.POST["first_name"]
+            last_name       = request.POST["last_name"]
+            dob             = request.POST['dob']
+            gender          = request.POST['gender']
+            phone           = request.POST['phone_number']
+            email           = request.POST["email"]
+            password        = request.POST["password"]
+            confirmation    = request.POST["confirmation"]
 
-        first_name = data["first_name"]
-        last_name = data["last_name"]
-        dob = data['dob']
-        gender = data['gender']
-        phone = data['phone_number']
-        email = data["email"]
+            if password != confirmation:
+                return render(request, "network/register.html", {
+                    "message": "Passwords must match."
+                })
 
-        # Ensure password matches confirmation
-        password = data["password"]
-        confirmation = data["confirmation"]
-        if password != confirmation:
-            return JsonResponse({"message": "Passwords must match!"}, status=401)
+            # Attempt to create new user
+            try:
+                user = User.objects.create_user(first_name=first_name, 
+                                            last_name=last_name, 
+                                            dob=dob,
+                                            gender=gender,
+                                            phone=phone,
+                                            email=email, 
+                                            username=email, 
+                                            password=password,
+                                            )
+                user.save()
+            
+            except IntegrityError:
+                return render(request, "network/register.html", {
+                    "message": "An account already exists with that email."
+                })
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            data = json.loads(request.body)
 
-        # Attempt to create new patient account
-        try:
-            user = User.objects.create_user(first_name=first_name, 
-                                        last_name=last_name, 
-                                        dob=dob,
-                                        gender=gender,
-                                        phone=phone,
-                                        email=email, 
-                                        username=email, 
-                                        password=password,
-                                        )
-            user.save()
-          
-        except IntegrityError:
-            return JsonResponse({"message": "An account already exists with that email."}, status=409)
-        
-        Patient.objects.create(user=user)
-        login(request, user)
-        return HttpResponse(status=200)
+            first_name      = data["first_name"]
+            last_name       = data["last_name"]
+            dob             = data['dob']
+            gender          = data['gender']
+            phone           = data['phone_number']
+            email           = data["email"]
+            password        = data["password"]
+            confirmation    = data["confirmation"]
+
+            # Ensure password matches confirmation
+            if password != confirmation:
+                return JsonResponse({"message": "Passwords must match!"}, status=401)
+
+            # Attempt to create new patient account
+            try:
+                user = User.objects.create_user(first_name=first_name, 
+                                            last_name=last_name, 
+                                            dob=dob,
+                                            gender=gender,
+                                            phone=phone,
+                                            email=email, 
+                                            username=email, 
+                                            password=password,
+                                            )
+                user.save()
+            
+            except IntegrityError:
+                return JsonResponse({"message": "An account already exists with that email."}, status=409)
+            
+            Patient.objects.create(user=user)
+            login(request, user)
+            return HttpResponse(status=200)
+
     else:
-        return HttpResponse(status=401)
+        return render(request, "medical_practice/register.html")
     
 
 def index(request):
@@ -138,8 +189,8 @@ def load_doctor_schedule(request):
 
 
 def load_booking_timeslots(request, date_string):
-    # print(type(date_string))
-    # print(datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%f%z').date())
+    print(date_string)
+    print(datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%f%z').date())
     doctors = Doctor.objects.all()
 
     schedules = DoctorSchedule.objects.all()
@@ -214,32 +265,35 @@ def book_appointment(request):
             
             Appointment.objects.create(patient=patient, doctor=doctor, time=time, date=date).save()
 
-
-        # # Ensure password matches confirmation
-        # password = data["password"]
-        # confirmation = data["confirmation"]
-        # if password != confirmation:
-        #     return JsonResponse({"message": "Passwords must match!"}, status=401)
-
-        # # Attempt to create new patient account
-        # try:
-        #     user = User.objects.create(first_name=first_name, 
-        #                                 last_name=last_name, 
-        #                                 dob=dob,
-        #                                 gender=gender,
-        #                                 phone=phone,
-        #                                 email=email, 
-        #                                 # username=email, 
-        #                                 password=password,
-        #                                 )
-        #     user.save()
-          
-        # except IntegrityError:
-        #     return JsonResponse({"message": "An account already exists with that email."}, status=409)
-        # login(request, user)
         return HttpResponse(status=200)
     else:
-        return HttpResponse(status=409)      
+        return HttpResponse(status=409)
+
+def appointments(request):
+    user = request.user
+    if not user.is_doctor:
+        account = Patient.objects.get(user=user)
+        appointments = Appointment.objects.filter(patient=account)
+    else:
+        account = Doctor.objects.get(user=user)
+        appointments = Appointment.objects.filter(doctor=account)
+        
+    
+    # print(date.today())
+    past_appointments = appointments.filter(date__lt=date.today())
+    upcoming_appointments = appointments.filter(date__gte=date.today())
+
+    # print(past_appointments)
+    # print(upcoming_appointments)
+
+    return render(request, "medical_practice/appointments.html", {
+        "account" : account,
+        "past_appointments" : past_appointments,
+        "upcoming_appointments" : upcoming_appointments
+    })
+        
+
+   
 
 def checkBookingAvailability(doctor, time, date):
     

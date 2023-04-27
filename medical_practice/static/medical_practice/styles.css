@@ -1,6 +1,29 @@
-main, footer#practice-summary {
+/* colours
+
+neutral
+primary
+call to action*/
+
+
+main, #practice-summary {
     max-width: 80%;
     margin: auto;
+}
+
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+#content {
+    padding-bottom: 20rem;    /* Footer height */
+}
+  
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20rem;            /* Footer height */
 }
 
 .navbar {
@@ -8,9 +31,14 @@ main, footer#practice-summary {
     padding-right: 10%;
 }
 
-footer#copyright {
+.right {
+    text-align: right;
+}
+
+#copyright {
+    font-size: small;
     text-align:center;
-    padding: 5px;
+    padding: 5px auto;
     background-color: hsl(180, 6%, 83%);
     color: #000;
 }
@@ -27,7 +55,7 @@ footer#copyright {
     display: grid;
     grid-template-columns: 0.3fr 0.7fr;
     /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
-    gap: 1.5rem;
+    /* gap: 1.5rem; */
 }
 
 .span-3-cols {
@@ -86,7 +114,28 @@ footer#copyright {
 }
 
 .team-member-photo {
-    margin: 0 auto;
+    display: flex;
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 1 / 1;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.appointment-details.span-2-cols {
+    gap: 1rem;
+}
+
+.appointment-details .photo-container {
+    padding: auto;
+    /* padding-right: 50px; */
+    border-right: 1px solid black;
+}
+
+.appointment-details .team-member-photo {
+    max-width: 100px;
 }
 
 .team-member-name {
@@ -111,6 +160,18 @@ footer#copyright {
     justify-content: end;
     gap: 2px;
     right: 0px;
+}
+
+.doctor-schedule.span-2-cols {
+    gap: 1rem;
+}
+
+.doctor-overview {
+    padding-top: 1.5rem;
+}
+
+.doctor-overview.span-2-cols {
+    gap: 1rem;
 }
 
 .doctor-schedule {
@@ -142,7 +203,7 @@ footer#copyright {
 }
 
 .timeslots.scrollable {
-    height: calc(8 * 2.3rem);
+    height: calc(8 * 1.8rem);
     overflow: scroll;
 }
 
@@ -187,6 +248,7 @@ button {
     border-radius: 1rem;
     margin: auto;    
 }
+
 
 .patient-type {
     text-align: center;
@@ -239,5 +301,80 @@ button#book-now {
     background-color: hsla(180, 6%, 83%, 20%);
 }
 
+#appointments-container {
+    grid-template-columns: 0.4fr 0.6fr;
+}
 
 
+.appointments h5 {
+    display: inline;
+    margin-right: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+.appointments h5:hover {
+    cursor: pointer;
+}
+
+.patient .span-2-cols {
+    grid-template-columns: 0.4fr 0.6fr;
+    gap: 1rem;
+}
+
+.upcoming-appointments, .past-appointments {
+    margin: 0.5rem 0;
+}
+
+.past-appointments {
+    display: none;
+}
+
+.appointment {
+    
+    margin: .5rem 0px;
+    border: 1px solid black;
+}
+
+.appointment-doctor, .appointment-time-date {
+    padding: 0.5rem 1rem;
+
+}
+
+.appointment-doctor {
+    border-bottom: 1px solid gray ;
+}
+
+.labels {
+    font-weight: bold;
+}
+
+svg {
+    height: 30px;
+}
+
+.svg-icon {
+    display: inline;
+    margin: 0 .5rem;
+}
+
+.selector {
+    color: hsl(180, 6%, 83%);
+    padding-bottom: 0.5rem;
+}
+
+.selector .selected {
+    position: relative;
+    color: black;
+}
+
+.selector .selected:after {
+    content:'';
+    position:absolute;
+    width: 100%;
+    bottom:0;
+    left:0;
+    right:0;
+    background:black;
+    height:2px;
+    border-radius: 1px;
+}

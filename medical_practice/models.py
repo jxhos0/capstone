@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 from django.core.validators import RegexValidator, MinLengthValidator
 
+from datetime import date
+
 # Create your models here.
 
 class Service(models.Model):
@@ -29,7 +31,7 @@ class User(AbstractUser):
     is_doctor   = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'ID: {self.id}, {self.first_name} {self.last_name}'
+        return f'ID: {self.id}, {self.first_name} {self.last_name}, {((date.today() - self.dob) / 365).days} years old'
 
 class Patient(models.Model):
     user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patient')

@@ -7,8 +7,17 @@
 <div id="container-booking">
     {% for doctor in doctors %}
         <div class="doctor-schedule span-2-cols" data-doctor_id="{{ doctor.id }}">
-            <div class="doctor-overview">
-                <h6>Dr {{ doctor.user.first_name }} {{ doctor.user.last_name }}</h6>
+            <div class="doctor-overview span-2-cols">
+                <div class="photo-container">
+                    <img class="team-member-photo" src="{{ doctor.photo.url }}" >
+                </div>
+                <div class="team-member-details">
+                    <h5>Dr {{ doctor.user.first_name }} {{ doctor.user.last_name }}</h5>
+
+                    <p>{{ doctor.user.gender }}, {{ doctor.qualifications }}</p>
+                    <p>Speaks {{ doctor.languages }}</p>
+                    <p>{{ doctor.summary|truncatewords:20 }}</p>
+                </div>
             </div>
             <div class="availability">
                 <div class="date-range-selectors">
@@ -28,3 +37,15 @@
 
 
 {% endblock %}
+
+<div class="team-member-container span-2-cols">
+    <div class="photo-container">
+        <img class="team-member-photo" src="{{ doctor.photo.url }}" height="200px" width="200px">
+    </div>
+    <div class="team-member-details">
+        <div class="team-member-name">Dr {{ doctor.user.first_name }} {{ doctor.user.last_name }}</div><br>
+        <div class="team-member-qualifications">{{ doctor.user.gender }}, {{ doctor.qualifications }}</div><br>
+        <div class="team-member-languages">Speaks {{ doctor.languages }}</div><br>
+        <div class="team-member-description">{{ doctor.summary }}</div><br>
+    </div>
+</div>
