@@ -10,12 +10,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Check user is on services page by searching for services div
     if (document.getElementById('container-services')) {
-        // Get all list elements 
-        document.querySelectorAll('li').forEach(li => {
+        // Get all services 
+        document.querySelectorAll('.service').forEach(service => {
             // Loop through list elements listening for a click
-            li.addEventListener('click', () => {
+            service.querySelector('.service-name').addEventListener('click', () => {
                 // Run the load service function using the list element id
-                load_service(li.id);
+                if (service.querySelector('.service-name').classList.contains('selected')) {
+                    console.log('selected')
+                } else {
+                    document.querySelectorAll('.selected').forEach(element => {
+                        element.classList.remove('selected')
+                    })
+
+                    service.querySelector('.service-name').classList.add('selected')
+                    service.querySelector('.service-description').classList.add('selected')
+                }
+                // console.log(service.querySelector('.service-name').classList)
             })
         })
     } else if (document.getElementById('container-booking')) {
@@ -89,23 +99,27 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        document.querySelectorAll('.appointment').forEach(appointment => {
-            appointment.addEventListener('click', () => {
+        if (!document.querySelector('.schedule-today p')) {
+            document.querySelectorAll('.appointment').forEach(appointment => {
+                appointment.addEventListener('click', () => {
+    
+                    document.querySelector('.no-selected-appointment').style.display = 'none';
 
-                var name = appointment.querySelector('.name').innerText;
-
-                document.querySelectorAll('.details').forEach(element => {
-
-                    if (element.classList.contains('active')) {
-                        element.classList.remove('active')
-                    };
-
-                    if (element.querySelector('.patient-name .value p').innerText === name) {
-                        element.classList.add('active')
-                    };
+                    var name = appointment.querySelector('.name').innerText;
+    
+                    document.querySelectorAll('.details').forEach(element => {
+    
+                        if (element.classList.contains('active')) {
+                            element.classList.remove('active')
+                        };
+    
+                        if (element.querySelector('.patient-name .value p').innerText === name) {
+                            element.classList.add('active')
+                        };
+                    });
                 });
             });
-        });
+        };
     };
 });
 

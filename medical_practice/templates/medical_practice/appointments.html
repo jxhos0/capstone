@@ -8,7 +8,7 @@
 
     {% if request.user.is_doctor %}
         <div id="appointments-container">
-            <div class="appointments-today span-2-cols">
+            <div class="appointments-today">
                 <div class="schedule-today">
                     {% for appointment in appointments_today %}
                         <div class="appointment">
@@ -19,13 +19,16 @@
                     {% endfor %}
                 </div>
                 <div class="appointment-details">
+
+                    <p class="no-selected-appointment">Select an appointment to load details</p>
+
                     {% for appointment in appointments_today %}
                         <div class="details">
                             <div class="details-header">
                                 <h5>Patient Details</h5>
-                                <div class="patient span-2-cols">
+                                <div class="patient-details">
                                     <div>
-                                        <div class="patient-name span-2-cols">
+                                        <div class="patient-name">
                                             <div class="label">
                                                 <p>Name:</p>
                                             </div>
@@ -33,7 +36,7 @@
                                                 <p>{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name }}</p>
                                             </div>
                                         </div>
-                                        <div class="patient-dob span-2-cols">
+                                        <div class="patient-dob">
                                             <div class="label">
                                                 <p>Date of Birth:</p>
                                             </div>

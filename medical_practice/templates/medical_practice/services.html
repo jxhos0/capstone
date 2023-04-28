@@ -4,7 +4,37 @@
 
 <h4>Services</h4>    
 <br>
-<div id="container-services" class="span-2-cols">
+
+<div id="container-services" >
+
+            
+    {% for service in services %}
+
+            {% if forloop.first %}
+                <div class="service">
+                    <div id="{{ service.id }}" class="service-name selected"><p>{{ service.title }}</p></div>
+                    <div class="service-description selected">
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+                
+            {% else %}
+                <div class="service">
+                    <div id="{{ service.id }}" class="service-name"><p>{{ service.title }}</p></div>
+                    <div class="service-description">
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+    {% endfor %}
+    
+
+    
+</div>
+<br>
+
+<!-- <div id="container-services" class="span-2-cols">
     <div class="services">
         <ul>
             {% for service in services %}
@@ -20,6 +50,5 @@
         <p>{{ services.0.description }}</p>
     </div>
 </div>
-<br>
-
+<br> -->
 {% endblock %}

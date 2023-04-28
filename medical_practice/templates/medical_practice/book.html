@@ -6,8 +6,8 @@
 
 <div id="container-booking">
     {% for doctor in doctors %}
-        <div class="doctor-schedule span-2-cols" data-doctor_id="{{ doctor.id }}">
-            <div class="doctor-overview span-2-cols">
+        <div class="doctor-schedule" data-doctor_id="{{ doctor.id }}">
+            <div class="doctor-overview">
                 <div class="photo-container">
                     <img class="team-member-photo" src="{{ doctor.photo.url }}" >
                 </div>

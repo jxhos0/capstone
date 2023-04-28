@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 from django.http import JsonResponse
 
@@ -137,6 +138,10 @@ def index(request):
 
 def services(request):
     services = Service.objects.all()
+
+    for service in services:
+        print(service.title)
+        
     return render(request, "medical_practice/services.html", {
         "services" : services
     })
@@ -270,6 +275,7 @@ def book_appointment(request):
         return HttpResponse(status=409)
 
 def appointments(request):
+
     user = request.user
     if not user.is_doctor:
         account = Patient.objects.get(user=user)
@@ -282,13 +288,6 @@ def appointments(request):
         appointments_today = appointments.filter(date=date.today())
         past_appointments = appointments.filter(date__lt=date.today())
         upcoming_appointments = appointments.filter(date__gt=date.today())
-        
-    
-    # print(date.today())
-
-
-    # print(past_appointments)
-    # print(upcoming_appointments)
 
     return render(request, "medical_practice/appointments.html", {
         "account" : account,

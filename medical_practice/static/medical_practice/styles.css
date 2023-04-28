@@ -6,11 +6,18 @@ call to action
 
 */
 
+
+/* Layout */
 #content {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     vertical-align: top;
+}
+
+.navbar {
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
 main, #practice-summary {
@@ -21,20 +28,9 @@ main, #practice-summary {
 footer {
     margin-top: auto;
     width: 100%;
-
-}
-
-.navbar {
-    padding-left: 10%;
-    padding-right: 10%;
-}
-
-.right {
-    text-align: right;
 }
 
 #copyright {
-
     font-size: small;
     text-align:center;
     padding: 5px auto;
@@ -42,72 +38,55 @@ footer {
     color: #000;
 }
 
-#container-services.span-2-cols {
-    border: 2px solid hsl(180, 6%, 83%);
-    border-radius: 20px;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
+button {
+    display: block;
+    text-align: center;
+    margin: auto;  
+    background: white;
 }
 
-.span-2-cols {
-    display: grid;
-    grid-template-columns: 0.3fr 0.7fr;
-    /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
-    /* gap: 1.5rem; */
+
+/* Embedded Google Map */
+.map {
+    width: 100%;
+    aspect-ratio: 2 / 1;
 }
 
-.span-3-cols {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
-    gap: 1.5rem;
+iframe {
+    width: 100%;
+    height: 100%;
 }
 
-.services ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+
+/* Services Page */
+#container-services {
+    position: relative;
+}
+
+.service {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-name {
+
     background: hsl(180, 6%, 83%);
 }
 
-.services li {
-    position: relative;
-    font-size: 1.1rem;
-    padding: 5px 0px 5px 10px;
-}
-
-.services li.selected, .services li:hover {
-    background: white;
-    border-radius:  10px 0 0 10px;
-}
-
-.services li.selected::before, .services li:hover::before {
-    content: "";
-    position: absolute;
-    top: -20px;
-    right: 0;
-    width: 20px;
-    height: 20px;
-    border-bottom-right-radius: 10px;
-    box-shadow: 0 10px 0 0 white;
-}
-
-.services li.selected::after, .services li:hover::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 20px;
-    height: 20px;
-    border-top-right-radius: 10px;
-    box-shadow: 0 -10px 0 0 white;
-}
-
 .service-description {
-    padding: 10px 10px 10px 0px;
+    display: none;
 }
 
+.service-name.selected {
+    background: white;
+}
+
+.service-description.selected {
+    display: block;
+}
+
+
+/* Team Member Page */
 .team-member-container {
     background-image: linear-gradient(white, hsla(180, 6%, 83%, 0.2));
 }
@@ -123,20 +102,6 @@ footer {
     border-radius: 50%;
 }
 
-.dialog-appointment-details.span-2-cols {
-    gap: 1rem;
-}
-
-.dialog-appointment-details .photo-container {
-    padding: auto;
-    /* padding-right: 50px; */
-    border-right: 1px solid black;
-}
-
-.dialog-appointment-details .team-member-photo {
-    max-width: 100px;
-}
-
 .team-member-name {
     font-size: 1.3rem;
 }
@@ -145,13 +110,14 @@ footer {
     font-weight: bold;
 }
 
-.clinic-details.span-2-cols {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+/* Booking Page */
+.doctor-overview {
+    padding-top: 1.5rem;
 }
 
-.map {
-    width: 100%;
-    aspect-ratio: 2 / 1;
+.doctor-schedule {
+    padding-bottom: 1rem;
 }
 
 .date-range-selectors {
@@ -159,22 +125,6 @@ footer {
     justify-content: end;
     gap: 2px;
     right: 0px;
-}
-
-.doctor-schedule.span-2-cols {
-    gap: 1rem;
-}
-
-.doctor-overview {
-    padding-top: 1.5rem;
-}
-
-.doctor-overview.span-2-cols {
-    gap: 1rem;
-}
-
-.doctor-schedule {
-    padding-bottom: 1rem;
 }
 
 .icon {
@@ -210,13 +160,6 @@ footer {
     vertical-align: top;
 }
 
-button {
-    display: block;
-    text-align: center;
-    margin: auto;  
-    background: white;
-}
-
 .timeslot {
     width: 100%;
     padding: 2px 5px;
@@ -224,10 +167,6 @@ button {
     border: 1px solid black;
     border-radius: 3px;
 
-}
-
-.hidden {
-    display: none;
 }
 
 .timeslot:hover, .timeslot:focus {
@@ -240,6 +179,16 @@ button {
     margin: auto;
 }
 
+.hidden {
+    display: none;
+}
+
+.shaded {
+    background-color: hsla(180, 6%, 83%, 20%);
+}
+
+
+/* Booking Confirmation Dialog Box */
 #booking-modal {
     width: 80%;
     height: 80%;
@@ -248,6 +197,20 @@ button {
     margin: auto;    
 }
 
+.dialog-appointment-details {
+    display: grid;
+    grid-template-columns: 0.3fr 0.7fr;
+    gap: 1rem;
+}
+
+.dialog-appointment-details .photo-container {
+    padding: auto;
+    border-right: 1px solid black;
+}
+
+.dialog-appointment-details .team-member-photo {
+    max-width: 100px;
+}
 
 .patient-type {
     text-align: center;
@@ -279,12 +242,6 @@ button#confirm-booking {
 
 .back-dialog {
     visibility: hidden;
-
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
 }
 
 button#book-now {
@@ -292,19 +249,37 @@ button#book-now {
     width: 80%;
     line-height: 3.6rem;
     border-radius: 1.8rem;
-    margin-left: 5%;
-    
+    margin-left: 5%;   
 }
 
-.shaded {
-    background-color: hsla(180, 6%, 83%, 20%);
+/* Appointments Page */
+
+.schedule-today {
+    border: 1PX SOLID BLACK;
+    overflow: scroll;
+    margin-bottom: 0.5rem;
 }
 
-#appointments-container {
-    width: 100%;
-    grid-template-columns: 0.4fr 0.6fr;
+.appointment {
+    margin: .5rem 0px;
+    padding: 0.5rem 1rem;
+    border: 1px solid black;
 }
 
+.appointment-details {
+    min-height: 4rem;
+    border: 1px solid black;
+    margin-bottom: 0.5rem;
+}
+
+.details {
+    display: none;
+}
+
+.patient-name, .patient-dob {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
 
 .appointments h5 {
     display: inline;
@@ -323,22 +298,16 @@ button#book-now {
 
 .upcoming-appointments, .past-appointments {
     margin: 0.5rem 0;
+    max-height: calc(((127 / 16) * 1rem) * 5);
+    overflow: scroll;
 }
 
 .past-appointments {
     display: none;
 }
 
-.appointment {
-    
-    margin: .5rem 0px;
-    padding: 0.5rem 1rem;
-    border: 1px solid black;
-}
-
 .appointment-person, .appointment-time-date {
     padding: 0.5rem 1rem;
-
 }
 
 .appointment-person {
@@ -380,29 +349,15 @@ svg {
     border-radius: 1px;
 }
 
-.appointments-today.span-2-cols {
-    /* grid-template-columns: 0.fr 0.6fr; */
-    gap: 1rem;
+
+/* Miscellaneous */
+.span-2-cols {
+    display: grid;
+    grid-template-columns: 0.3fr 0.7fr;
 }
 
-.schedule-today {
-
-    border: 1PX SOLID BLACK;
-    overflow: scroll;
-
-}
-
-.appointment-details {
-    min-height: 20rem;
-    border: 1px solid black;
-}
-
-.details {
-    display: none;
-}
-
-.patient.span-2-cols {
-    grid-template-columns: 0.4fr 0.6fr;
+.right {
+    text-align: right;
 }
 
 .active {
@@ -411,4 +366,76 @@ svg {
 
 .hidden {
     visibility: hidden;
+}
+
+
+/* Media Queries */
+@media (min-width: 650px) {
+    /* Layout */
+    main, #practice-summary {
+        width: 95%;
+    }
+
+    /* Services Page */
+    .service {
+        display: flex;
+    }
+    
+    .service-name {
+        width: 30%;
+        background: hsl(180, 6%, 83%);
+    }
+    
+    .service-description {
+        position: absolute;
+        top: 0;
+        left: 30%;
+        display: none;
+        width: 70%;
+        height: 100%;
+    }
+
+    /* Contact Us Page */
+    .clinic-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+@media (min-width: 850px) {
+    /* Layout */
+    #practice-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Team Member Page */
+    .team-member-container {
+        display: grid;
+        grid-template-columns: 0.3fr 0.7fr;
+       
+    }
+
+    /* Booking Page */
+    .doctor-schedule, .doctor-overview {
+        display: grid;
+        grid-template-columns: 0.3fr 0.7fr;
+        gap: 1rem;
+    }
+
+    /* Appointments Page */
+    .appointments-today {
+        display: grid;
+        grid-template-columns: 0.3fr 0.7fr;
+        gap: 1rem;
+    }
+
+    .appointment-details {
+        min-height: 20rem;
+    }
+
+    .patient-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
 }
