@@ -74,8 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.selector h5').forEach(list => {
             list.addEventListener('click', () => {
                 if (!list.classList.contains('selected')) {
-                    document.querySelector('.selected').classList.remove('selected')
-                    list.classList.add('selected')
+                    document.querySelector('.selected').classList.remove('selected');
+                    list.classList.add('selected');
 
                     if (list.innerText === 'Upcoming Appointments') {
                         document.querySelector('.upcoming-appointments').style.display = 'block';
@@ -86,6 +86,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                     };
                 };
+            });
+        });
+
+        document.querySelectorAll('.appointment').forEach(appointment => {
+            appointment.addEventListener('click', () => {
+
+                var name = appointment.querySelector('.name').innerText;
+
+                document.querySelectorAll('.details').forEach(element => {
+
+                    if (element.classList.contains('active')) {
+                        element.classList.remove('active')
+                    };
+
+                    if (element.querySelector('.patient-name .value p').innerText === name) {
+                        element.classList.add('active')
+                    };
+                });
             });
         });
     };
@@ -276,7 +294,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
 
         // If going back from the confirmation booking HTML element, show the dialog header again
         if (recent_elements.length === 2) {
-            dialog.querySelector('.appointment-details').style.display = 'grid';
+            dialog.querySelector('.dialog-appointment-details').style.display = 'grid';
         };
     });
 
@@ -328,7 +346,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
                 current_element.style.display = 'block';
     
                 // Hide the dialog header
-                dialog.querySelector('.appointment-details').style.display = 'none';
+                dialog.querySelector('.dialog-appointment-details').style.display = 'none';
     
             // If user is unauthorised
             } else if (response["status"] === 401) {
@@ -372,7 +390,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
                 current_element.style.display = 'block';
 
                 // Hide the dialog header
-                dialog.querySelector('.appointment-details').style.display = 'none';
+                dialog.querySelector('.dialog-appointment-details').style.display = 'none';
 
             // If user is unauthorised
             } else if (response["status"] === 401) {
@@ -440,7 +458,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
 
 //             current_element.style.display = 'block';
 
-//             dialog.querySelector('.appointment-details').style.display = 'none';
+//             dialog.querySelector('.dialog-appointment-details').style.display = 'none';
 
 //             // console.log(recent_elements.innerHTML)
 //         } else if (response["status"] === 401) {

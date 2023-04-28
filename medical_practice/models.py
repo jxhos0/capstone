@@ -35,8 +35,8 @@ class User(AbstractUser):
 
 class Patient(models.Model):
     user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patient')
-    smokes      = models.CharField(max_length=10, choices=[('1', 'Yes'), ('2', 'No'), ('3', 'Used to')], blank=True)
-    drinks      = models.CharField(max_length=10, choices=[('1', 'Yes'), ('2', 'No'), ('3', 'Used to')], blank=True)
+    smokes      = models.CharField(max_length=15, choices=[('1', 'Yes'), ('2', 'No'), ('3', 'Occasionally'), ('4', 'Used to')], blank=True)
+    drinks      = models.CharField(max_length=15, choices=[('1', 'Yes'), ('2', 'No'), ('3', 'Occasionally'), ('4', 'Used to')], blank=True)
     # allergies     needs to be many field
     # on_prescriptions
     # past_surgeries needs to be many field
@@ -89,6 +89,9 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='booked_doctor')
     date = models.DateField(max_length=8, blank=False, null=False)
     time = models.TimeField(blank=True, null=True)
+
+    patient_notes = models.TextField(max_length=300, blank=True, null=True, default='')
+    doctor_notes = models.TextField(max_length=300, blank=True, null=True, default='')
 
     def __str__(self):
         return f'{self.patient.user.first_name} booked with Dr {self.doctor.user.last_name}, on {self.date} at {self.time}'

@@ -274,14 +274,18 @@ def appointments(request):
     if not user.is_doctor:
         account = Patient.objects.get(user=user)
         appointments = Appointment.objects.filter(patient=account)
+        past_appointments = appointments.filter(date__lt=date.today())
+        upcoming_appointments = appointments.filter(date__gte=date.today())
     else:
         account = Doctor.objects.get(user=user)
         appointments = Appointment.objects.filter(doctor=account)
+        appointments_today = appointments.filter(date=date.today())
+        past_appointments = appointments.filter(date__lt=date.today())
+        upcoming_appointments = appointments.filter(date__gt=date.today())
         
     
     # print(date.today())
-    past_appointments = appointments.filter(date__lt=date.today())
-    upcoming_appointments = appointments.filter(date__gte=date.today())
+
 
     # print(past_appointments)
     # print(upcoming_appointments)
@@ -289,12 +293,10 @@ def appointments(request):
     return render(request, "medical_practice/appointments.html", {
         "account" : account,
         "past_appointments" : past_appointments,
-        "upcoming_appointments" : upcoming_appointments
+        "upcoming_appointments" : upcoming_appointments,
+        "appointments_today" : appointments_today
     })
         
-
-   
-
 def checkBookingAvailability(doctor, time, date):
     
     try:

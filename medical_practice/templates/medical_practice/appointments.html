@@ -4,14 +4,136 @@
 
     <h3>Appointments</h3>    
 
+    <h5>Today's Schedule</h5>
+
     {% if request.user.is_doctor %}
-        <div id="appointments-container" class="span-2-cols">
-            doctor view
+        <div id="appointments-container">
+            <div class="appointments-today span-2-cols">
+                <div class="schedule-today">
+                    {% for appointment in appointments_today %}
+                        <div class="appointment">
+                            <strong>{{ appointment.time}}</strong> - <strong class="name">{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name}}</strong>
+                        </div>
+                    {% empty %}
+                        <p>At the moment you have no booked patients for today.</p>
+                    {% endfor %}
+                </div>
+                <div class="appointment-details">
+                    {% for appointment in appointments_today %}
+                        <div class="details">
+                            <div class="details-header">
+                                <h5>Patient Details</h5>
+                                <div class="patient span-2-cols">
+                                    <div>
+                                        <div class="patient-name span-2-cols">
+                                            <div class="label">
+                                                <p>Name:</p>
+                                            </div>
+                                            <div class="value">
+                                                <p>{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="patient-dob span-2-cols">
+                                            <div class="label">
+                                                <p>Date of Birth:</p>
+                                            </div>
+                                            <div class="value">
+                                                <p>{{ appointment.patient.user.dob|date:"d/m/Y" }}</p>    
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div>
+                                        <div class="patient-health">
+                                            <div class="span-2-cols">
+                                                <div class="label">
+                                                    <p>Smokes:</p>
+                                                </div>
+                                                <div class="value">
+                                                    <p>{{ appointment.patient.get_smokes_display }}</p>    
+                                                </div>
+                                            </div>
+                                            <div class="span-2-cols">
+                                                <div class="label">
+                                                    <p>Drinks:</p>
+                                                </div>
+                                                <div class="value">
+                                                    <p>{{ appointment.patient.get_drinks_display }}</p>    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="patient-notes">
+                                <p>Patient Notes:</p>
+                                <p>{{ appointment.patient_notes}}</p>
+                            </div>
+
+                            <div class="doctor-notes">
+                                <p>Doctor Notes:</p>
+                                <textarea name="" id="" rows="4" style="width: 100%;"></textarea>
+                                <button>Save Notes</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="appointments">
+                <div class="selector">
+                    <h5 class="selected">Upcoming Appointments</h5>
+                    <h5>Past Appointments</h5>
+                </div>
+                <div class="upcoming-appointments">
+                    {% for appointment in upcoming_appointments%}
+                        <div class="appointment">
+                            <div class="appointment-person">
+                                <div class="svg-icon">
+                                    <svg fill="#000000" viewBox="0 0 32 32" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:serif="http://www.serif.com/" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="#000000" stroke-width="0.384"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M9.731,14.075c-1.387,0.252 -2.676,0.921 -3.687,1.932c-1.309,1.309 -2.044,3.084 -2.044,4.935l0,4.039c0,1.657 1.343,3 3,3c4.184,-0 13.816,-0 18,-0c1.657,-0 3,-1.343 3,-3l0,-4.039c0,-1.851 -0.735,-3.626 -2.044,-4.935c-1.011,-1.011 -2.3,-1.68 -3.687,-1.932c0.468,-0.939 0.731,-1.997 0.731,-3.117c0,-3.863 -3.137,-7 -7,-7c-3.863,0 -7,3.137 -7,7c0,1.12 0.263,2.178 0.731,3.117Zm11.169,1.88c-1.262,1.239 -2.993,2.003 -4.9,2.003c-1.907,0 -3.638,-0.764 -4.9,-2.003c-0.04,0.005 -0.08,0.007 -0.12,0.007c-1.321,0 -2.588,0.525 -3.521,1.459c-0.934,0.934 -1.459,2.201 -1.459,3.521c0,0 0,4.039 0,4.039c0,0.552 0.448,1 1,1l18,-0c0.552,-0 1,-0.448 1,-1c-0,-0 0,-4.039 0,-4.039c0,-1.32 -0.525,-2.587 -1.459,-3.521c-0.933,-0.934 -2.2,-1.459 -3.521,-1.459c-0.04,0 -0.08,-0.002 -0.12,-0.007Zm-4.9,-9.997c2.76,0 5,2.241 5,5c0,2.76 -2.24,5 -5,5c-2.76,0 -5,-2.24 -5,-5c0,-2.759 2.24,-5 5,-5Z"></path><path d="M20,20.008l-1,-0c-0.552,-0 -1,0.448 -1,1c-0,0.552 0.448,1 1,1l1,-0l0,1c-0,0.552 0.448,1 1,1c0.552,-0 1,-0.448 1,-1l0,-1l1,-0c0.552,-0 1,-0.448 1,-1c-0,-0.552 -0.448,-1 -1,-1l-1,-0l0,-1c-0,-0.552 -0.448,-1 -1,-1c-0.552,-0 -1,0.448 -1,1l0,1Z"></path></g></svg>
+                                </div>
+                                <strong>{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name }}</strong> 
+                            </div>
+                            <div class="appointment-time-date">
+                                <div class="svg-icon">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g id="Clock"> <g> <polyline fill="none" points="11.9 5.9 11.9 11.9 12 12 14.1 14.1" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline> <circle cx="12" cy="12" data-name="Circle" fill="none" id="Circle-2" r="10" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle> </g> </g> </g> </g></svg>
+                                </div>
+                                <strong>{{ appointment.time }}</strong> on <strong>{{ appointment.date }}</strong>
+                            </div> 
+                        </div>
+                    {% empty %}
+                        <p>You have no upcoming appointments.</p>
+                        <br>
+                        <!-- <p>If you need to book an appointment, click below!</p>
+                        <br>
+                        <a href="{% url 'book' %}"><button id="book-now">Book Online</button></a> -->
+                    {% endfor %}
+                </div>
+            
+                <div class="past-appointments">
+                    {% for appointment in past_appointments%}
+                        <div class="appointment">
+                            <div class="appointment-person">
+                                <div class="svg-icon">
+                                    <svg fill="#000000" viewBox="0 0 32 32" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:serif="http://www.serif.com/" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="#000000" stroke-width="0.384"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M9.731,14.075c-1.387,0.252 -2.676,0.921 -3.687,1.932c-1.309,1.309 -2.044,3.084 -2.044,4.935l0,4.039c0,1.657 1.343,3 3,3c4.184,-0 13.816,-0 18,-0c1.657,-0 3,-1.343 3,-3l0,-4.039c0,-1.851 -0.735,-3.626 -2.044,-4.935c-1.011,-1.011 -2.3,-1.68 -3.687,-1.932c0.468,-0.939 0.731,-1.997 0.731,-3.117c0,-3.863 -3.137,-7 -7,-7c-3.863,0 -7,3.137 -7,7c0,1.12 0.263,2.178 0.731,3.117Zm11.169,1.88c-1.262,1.239 -2.993,2.003 -4.9,2.003c-1.907,0 -3.638,-0.764 -4.9,-2.003c-0.04,0.005 -0.08,0.007 -0.12,0.007c-1.321,0 -2.588,0.525 -3.521,1.459c-0.934,0.934 -1.459,2.201 -1.459,3.521c0,0 0,4.039 0,4.039c0,0.552 0.448,1 1,1l18,-0c0.552,-0 1,-0.448 1,-1c-0,-0 0,-4.039 0,-4.039c0,-1.32 -0.525,-2.587 -1.459,-3.521c-0.933,-0.934 -2.2,-1.459 -3.521,-1.459c-0.04,0 -0.08,-0.002 -0.12,-0.007Zm-4.9,-9.997c2.76,0 5,2.241 5,5c0,2.76 -2.24,5 -5,5c-2.76,0 -5,-2.24 -5,-5c0,-2.759 2.24,-5 5,-5Z"></path><path d="M20,20.008l-1,-0c-0.552,-0 -1,0.448 -1,1c-0,0.552 0.448,1 1,1l1,-0l0,1c-0,0.552 0.448,1 1,1c0.552,-0 1,-0.448 1,-1l0,-1l1,-0c0.552,-0 1,-0.448 1,-1c-0,-0.552 -0.448,-1 -1,-1l-1,-0l0,-1c-0,-0.552 -0.448,-1 -1,-1c-0.552,-0 -1,0.448 -1,1l0,1Z"></path></g></svg>
+                                </div>
+                                <strong>{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name }}</strong> 
+                            </div>
+                            <div class="appointment-time-date">
+                                <div class="svg-icon">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g id="Clock"> <g> <polyline fill="none" points="11.9 5.9 11.9 11.9 12 12 14.1 14.1" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline> <circle cx="12" cy="12" data-name="Circle" fill="none" id="Circle-2" r="10" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle> </g> </g> </g> </g></svg>
+                                </div>
+                                <strong>{{ appointment.time }}</strong> on <strong>{{ appointment.date }}</strong>
+                            </div> 
+                        </div>
+                    {% empty %}
+                        <p>You have no past appointments</p>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     {% else %}
         <div id="appointments-container" class="span-2-cols">
             <div class="patient">
-
                 <h5>Your Details</h5>
                 <div class="patient-name span-2-cols">
                     <div class="label">
@@ -35,8 +157,7 @@
                     </div>
                     <div class="value">
                         <p>{{ account.user.phone }}</p>
-                    </div>
-                    
+                    </div>  
                 </div>
                 <div class="patient-email span-2-cols">
                     <div class="label">
@@ -44,12 +165,9 @@
                     </div>
                     <div class="value">
                         <p>{{ account.user.email }}</p>
-                    </div>
-                    
-                </div>
-                
+                    </div>  
+                </div>  
             </div>
-
             <div class="appointments">
                 <div class="selector">
                     <h5 class="selected">Upcoming Appointments</h5>
@@ -58,15 +176,19 @@
                 <div class="upcoming-appointments">
                     {% for appointment in upcoming_appointments%}
                         <div class="appointment">
-                            <div class="appointment-doctor">
-                                {{ appointment.doctor }}
+                            <div class="appointment-person">
+                                <div class="svg-icon">
+                                    <svg fill="#000000"  version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490.1 490.1" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M463.9,275.85v-52.1c0-38.6-31.3-69.9-69.9-69.9s-69.9,31.3-69.9,69.9v131.3c0,43.8-35.4,79.2-79.2,79.2 s-79.2-35.4-79.2-79.2v-46.2c69.6-9.3,124.3-64.5,126.1-131v-123c0-11.5-9.4-20.9-20.9-20.9c-0.4,0-48.1,0-48.1,0 c-1.1-10.5-10-18.8-20.7-18.8c-11.5,0-20.9,9.4-20.9,20.9v37.5c0,11.5,9.4,20.9,20.9,20.9c10.8,0,18.8-8.3,20.6-18.8h27.4v102.2 c0,50-46.9,90.7-104.3,90.7c-57.3,0-104.3-40.7-104.3-90.7V75.65h26.2c1.1,10.5,10,18.8,20.7,18.8c11.5,0,19.8-9.4,20.9-20.9v-37.5 c0-11.5-9.4-20.9-20.9-20.9c-10.8,0-19.7,8.3-20.7,18.8h-47C9.4,33.95,0,43.35,0,54.75v123c0,66.5,53.7,121.8,124.1,131v46.3 c0,65.7,54.2,119.9,119.9,119.9c66.7,0,119.9-53.2,122-119.9v-131.4c0-15.6,12.5-28.1,28.1-28.1s28.1,12.5,28.1,28.1v51.4 c-16.5,7.7-28.1,24.5-28.1,43.5c0,26.1,20.9,48,48,48c26.1,0,48-20.9,48-48C490,300.15,479.6,283.85,463.9,275.85z M442,325.85 c-4.2,0-7.3-3.1-7.3-7.3s3.1-7.3,7.3-7.3c4.2,0,7.3,4.2,7.3,7.3C449.3,322.75,446.2,325.85,442,325.85z"></path> </g> </g></svg>
+                                </div>
+                                <strong>Dr {{ appointment.doctor.user.first_name }} {{ appointment.doctor.user.last_name }}</strong> 
                             </div>
                             <div class="appointment-time-date">
-                                {{ appointment.time }} on {{ appointment.date }}
-                            </div>
-                            
+                                <div class="svg-icon">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g id="Clock"> <g> <polyline fill="none" points="11.9 5.9 11.9 11.9 12 12 14.1 14.1" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline> <circle cx="12" cy="12" data-name="Circle" fill="none" id="Circle-2" r="10" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle> </g> </g> </g> </g></svg>
+                                </div>
+                                <strong>{{ appointment.time }}</strong> on <strong>{{ appointment.date }}</strong>
+                            </div> 
                         </div>
-                        
                     {% empty %}
                         <p>You have no upcoming appointments.</p>
                         <br>
@@ -79,7 +201,7 @@
                 <div class="past-appointments">
                     {% for appointment in past_appointments%}
                         <div class="appointment">
-                            <div class="appointment-doctor">
+                            <div class="appointment-person">
                                 <div class="svg-icon">
                                     <svg fill="#000000"  version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490.1 490.1" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M463.9,275.85v-52.1c0-38.6-31.3-69.9-69.9-69.9s-69.9,31.3-69.9,69.9v131.3c0,43.8-35.4,79.2-79.2,79.2 s-79.2-35.4-79.2-79.2v-46.2c69.6-9.3,124.3-64.5,126.1-131v-123c0-11.5-9.4-20.9-20.9-20.9c-0.4,0-48.1,0-48.1,0 c-1.1-10.5-10-18.8-20.7-18.8c-11.5,0-20.9,9.4-20.9,20.9v37.5c0,11.5,9.4,20.9,20.9,20.9c10.8,0,18.8-8.3,20.6-18.8h27.4v102.2 c0,50-46.9,90.7-104.3,90.7c-57.3,0-104.3-40.7-104.3-90.7V75.65h26.2c1.1,10.5,10,18.8,20.7,18.8c11.5,0,19.8-9.4,20.9-20.9v-37.5 c0-11.5-9.4-20.9-20.9-20.9c-10.8,0-19.7,8.3-20.7,18.8h-47C9.4,33.95,0,43.35,0,54.75v123c0,66.5,53.7,121.8,124.1,131v46.3 c0,65.7,54.2,119.9,119.9,119.9c66.7,0,119.9-53.2,122-119.9v-131.4c0-15.6,12.5-28.1,28.1-28.1s28.1,12.5,28.1,28.1v51.4 c-16.5,7.7-28.1,24.5-28.1,43.5c0,26.1,20.9,48,48,48c26.1,0,48-20.9,48-48C490,300.15,479.6,283.85,463.9,275.85z M442,325.85 c-4.2,0-7.3-3.1-7.3-7.3s3.1-7.3,7.3-7.3c4.2,0,7.3,4.2,7.3,7.3C449.3,322.75,446.2,325.85,442,325.85z"></path> </g> </g></svg>
                                 </div>
@@ -90,8 +212,7 @@
                                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g id="Clock"> <g> <polyline fill="none" points="11.9 5.9 11.9 11.9 12 12 14.1 14.1" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline> <circle cx="12" cy="12" data-name="Circle" fill="none" id="Circle-2" r="10" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle> </g> </g> </g> </g></svg>
                                 </div>
                                 <strong>{{ appointment.time }}</strong> on <strong>{{ appointment.date }}</strong>
-                            </div>
-                            
+                            </div> 
                         </div>
                     {% empty %}
                         <p>You have no past appointments</p>
@@ -100,6 +221,5 @@
             </div>
         </div>
     {% endif %}
-
 
 {% endblock %}
