@@ -282,17 +282,31 @@ def appointments(request):
     else:
         account = Doctor.objects.get(user=user)
         appointments = Appointment.objects.filter(doctor=account)
-        appointments_today = appointments.filter(date=date.today())
         past_appointments = appointments.filter(date__lt=date.today())
         upcoming_appointments = appointments.filter(date__gt=date.today())
 
     return render(request, "medical_practice/appointments.html", {
         "account" : account,
-        "past_appointments" : past_appointments,
-        "upcoming_appointments" : upcoming_appointments,
-        "appointments_today" : appointments_today
+        "past_appointments" : past_appointments.order_by('date', 'time'),
+        "upcoming_appointments" : upcoming_appointments.order_by('date', 'time'),
+        "appointments_today" : appointments.filter(date=date.today()).order_by('time')
     })
+
+def save_doctors_notes(request):
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+
+        appointment_id = data["appointment_id"]
+        doctors_note = data["note"]
         
+        try:
+            Appointment.objects.filter(pk=appointment_id).update(doctor_notes=doctors_note)
+            return HttpResponse(status=200)
+        
+        except Appointment.DoesNotExist:
+            return HttpResponse(status=409)
+
 def checkBookingAvailability(doctor, time, date):
     
     try:

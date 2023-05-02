@@ -2,20 +2,30 @@
 
 {% block body %}
 
-    <h3>Appointments</h3>    
+    <h3>Account</h3>    
 
-    <h5>Today's Schedule</h5>
+    
 
     {% if request.user.is_doctor %}
-        <div id="appointments-container">
+        <h5>Today's Schedule</h5>
+
+        <div id="appointments-container" class="doctors-view">
             <div class="appointments-today">
                 <div class="schedule-today">
                     {% for appointment in appointments_today %}
-                        <div class="appointment">
-                            <strong>{{ appointment.time}}</strong> - <strong class="name">{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name}}</strong>
-                        </div>
+                        {% if forloop.counter|divisibleby:2 %}
+                            <div id="{{ appointment.id }}" class="appointment">
+                                <strong>{{ appointment.time}}</strong> - <strong class="name">{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name}}</strong>
+                            </div>
+                            
+                        {% else %}
+                            <div id="{{ appointment.id }}" class="appointment shaded">
+                                <strong>{{ appointment.time}}</strong> - <strong class="name">{{ appointment.patient.user.first_name }} {{ appointment.patient.user.last_name}}</strong>
+                            </div>
+                            
+                        {% endif %}
                     {% empty %}
-                        <p>At the moment you have no booked patients for today.</p>
+                        <p class="no-selected-appointment">At the moment you have no booked patients for today.</p>
                     {% endfor %}
                 </div>
                 <div class="appointment-details">
@@ -23,7 +33,7 @@
                     <p class="no-selected-appointment">Select an appointment to load details</p>
 
                     {% for appointment in appointments_today %}
-                        <div class="details">
+                        <div id="{{ appointment.id }}" class="details">
                             <div class="details-header">
                                 <h5>Patient Details</h5>
                                 <div class="patient-details">
@@ -69,14 +79,22 @@
                                 
                             </div>
                             <div class="patient-notes">
-                                <p>Patient Notes:</p>
-                                <p>{{ appointment.patient_notes}}</p>
+                                <div class="label">
+                                    <p>Patient Notes:</p>
+                                </div>
+                                <div class="value">
+                                    <p>{{ appointment.patient_notes}}</p>  
+                                </div>
                             </div>
 
                             <div class="doctor-notes">
-                                <p>Doctor Notes:</p>
-                                <textarea name="" id="" rows="4" style="width: 100%;"></textarea>
-                                <button>Save Notes</button>
+                                <div class="label">
+                                    <p>Doctor Notes:</p>
+                                </div>
+                                <div class="value">
+                                    <textarea name="doctor_notes" id="doctor-notes" rows="4">{{ appointment.doctor_notes }}</textarea>
+                                </div>
+                                <input class="btn btn-primary save-doctor-notes" value="Save Notes">
                             </div>
                         </div>
                     {% endfor %}
@@ -106,9 +124,6 @@
                     {% empty %}
                         <p>You have no upcoming appointments.</p>
                         <br>
-                        <!-- <p>If you need to book an appointment, click below!</p>
-                        <br>
-                        <a href="{% url 'book' %}"><button id="book-now">Book Online</button></a> -->
                     {% endfor %}
                 </div>
             
@@ -135,7 +150,7 @@
             </div>
         </div>
     {% else %}
-        <div id="appointments-container" class="span-2-cols">
+        <div id="appointments-container" class="patient-view">
             <div class="patient">
                 <h5>Your Details</h5>
                 <div class="patient-name span-2-cols">

@@ -105,7 +105,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
                     document.querySelector('.no-selected-appointment').style.display = 'none';
 
-                    var name = appointment.querySelector('.name').innerText;
+                    if (document.querySelector('.appointment.selected')) {
+                        document.querySelector('.appointment.selected').classList.remove('selected')
+                    }
+
+                    appointment.classList.add('selected')
+
+                    var appointment_id = appointment.id;
     
                     document.querySelectorAll('.details').forEach(element => {
     
@@ -113,13 +119,50 @@ document.addEventListener('DOMContentLoaded', function() {
                             element.classList.remove('active')
                         };
     
-                        if (element.querySelector('.patient-name .value p').innerText === name) {
+                        if (element.id === appointment_id) {
                             element.classList.add('active')
+                        };
+                    });
+
+                    document.querySelectorAll('.save-doctor-notes').forEach(button => {
+                        button.value = 'Save Notes'
+                    })
+                });
+            });
+
+            document.querySelectorAll('.save-doctor-notes').forEach(button => {
+                button.addEventListener('click', () => {
+                    // console.log(button.closest('.details').id)
+                    // console.log(button.closest('.doctor-notes').querySelector('#doctor-notes').value)
+                    // var appointment_id = button.closest('.details').id;
+                    // var doctor_notes = button.closest('.doctor-notes').querySelector('#doctor-notes').value;
+
+                    fetch('/save_doctors_notes', {
+                        method: 'POST',
+                        headers: {'X-CSRFToken': getCookie('csrftoken')},
+                        mode: 'same-origin',
+                        body: JSON.stringify({
+                            appointment_id : button.closest('.details').id,
+                            note : button.closest('.doctor-notes').querySelector('#doctor-notes').value
+                        })
+                    })
+                    .then((response) => {
+                        // Check for HTTP Response
+                        // If success code
+                        if (response["status"] === 200) {
+                            button.value = 'Saved'
+            
+                        // If appointment booking already exists
+                        } else if (response["status"] === 409) {
+                            // INSERT ERROR MESSAGE
                         };
                     });
                 });
             });
+
         };
+
+
     };
 });
 
@@ -272,11 +315,11 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
     // Set the values of the dialog header HTML element
     dialog.querySelector('.photo-container').innerHTML = `${doctor_photo_html}`
     dialog.querySelector('.appointment-doctor').innerHTML = `<strong>${doctor}</strong>`;
-    dialog.querySelector('.appointment-date-time').innerHTML = `on <strong>${new Date(date).toDateString()}</strong> at <strong>${time}</strong>`;
+    dialog.querySelector('.appointment-date-time').innerHTML = `on <strong>${new Date(date).toDateString()}</strong> at <strong>${ampm_time_format(time)}</strong>`;
     
     // Set the values of the confirmation page
     dialog.querySelector('.selected-date').innerText = `${new Date(date).toDateString()}`;
-    dialog.querySelector('.selected-time').innerText = `${time}`;
+    dialog.querySelector('.selected-time').innerText = `${ampm_time_format(time)}`;
     dialog.querySelector('.selected-doctor').innerText = `${doctor}`;
 
     // Set the max value for date of birth input field in registration form as anything less than today

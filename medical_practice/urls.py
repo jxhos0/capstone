@@ -19,6 +19,6 @@ urlpatterns = [
     path("doctor/schedule", views.load_doctor_schedule, name="load_doctor_schedule"),
     path("bookings/<str:date_string>", views.load_booking_timeslots, name="bookings"),
     path("confirm-patient", views.confirm_patient, name="confirm_patient"),
-    # path("register", views.register, name="register"),
-    path("book_appointment", views.book_appointment, name="book_appointment")
+    path("book_appointment", views.book_appointment, name="book_appointment"),
+    path("save_doctors_notes", views.save_doctors_notes, name="save_doctors_notes"),
 ]

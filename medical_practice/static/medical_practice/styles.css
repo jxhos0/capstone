@@ -69,7 +69,6 @@ iframe {
     border: 1px solid black;
     border-radius: 1rem;
     overflow: hidden;
-    /* padding: 1rem; */
 }
 
 .service {
@@ -202,11 +201,12 @@ iframe {
 
 /* Booking Confirmation Dialog Box */
 #booking-modal {
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    height: 90%;
     padding: 30px;
     border-radius: 1rem;
-    margin: auto;    
+    margin: auto;   
+    overflow: scroll; 
 }
 
 .dialog-appointment-details {
@@ -226,21 +226,29 @@ iframe {
 
 .patient-type {
     text-align: center;
-    justify-content: center;
-    padding-top: 10%;
+
 }
 
 button#existing-patient, button#new-patient {
-    width: 35%;
+    min-width: 90%;
     line-height: 3rem;
     font-size: 1.5rem;
     border-radius: 1rem;
 }
 
-button#confirm-booking {
-    width: 150px;
+#login input.btn, #dialog-register input.btn {
+    display: block;
+    width: 100%;
+}
+
+#patient-notes {
+    width: 100%;
+    border-radius: 1rem;
+}
+
+#confirm-booking {
+    width: 100%;
     line-height: 1.5rem;
-    border-radius: .2rem;
 }
 
 .confirmed-booking {
@@ -270,23 +278,38 @@ button#book-now {
 
 
 /* Appointments Page */
-
 .schedule-today {
-    border: 1PX SOLID BLACK;
     overflow: scroll;
     margin-bottom: 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid black;
 }
 
 .appointment {
     margin: .5rem 0px;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
+    border-radius: 1rem;
     border: 1px solid black;
+}
+
+.appointment.selected {
+    text-decoration: underline;
+}
+
+.schedule-today .appointment {
+    border: none;
 }
 
 .appointment-details {
     min-height: 4rem;
-    border: 1px solid black;
     margin-bottom: 0.5rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid black;
+}
+
+.schedule-today .no-selected-appointment {
+    padding: 1rem;
 }
 
 .details {
@@ -298,9 +321,22 @@ button#book-now {
     grid-template-columns: 1fr 1fr;
 }
 
+.patient-health .span-2-cols {
+    grid-template-columns: 1fr 1fr;
+}
+
+#doctor-notes {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 1rem;
+}
+
+.save-doctor-notes {
+    width: 100%;
+}
+
 .appointments h5 {
-    display: inline;
-    margin-right: 2rem;
+    display: block;
     padding-bottom: 0.5rem;
 }
 
@@ -313,8 +349,11 @@ button#book-now {
     gap: 1rem;
 }
 
+.appointments {
+    margin-top: 0.5rem;
+}
+
 .upcoming-appointments, .past-appointments {
-    margin: 0.5rem 0;
     max-height: calc(((127 / 16) * 1rem) * 5);
     overflow: scroll;
 }
@@ -324,15 +363,15 @@ button#book-now {
 }
 
 .appointment-person, .appointment-time-date {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.5rem;
 }
 
 .appointment-person {
     border-bottom: 1px solid gray ;
 }
 
-.labels {
-    font-weight: bold;
+.label {
+    font-weight: 600;
 }
 
 svg {
@@ -346,7 +385,7 @@ svg {
 
 .selector {
     color: hsl(180, 6%, 83%);
-    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
 }
 
 .selector .selected {
@@ -388,8 +427,6 @@ svg {
 
 /* Media Queries */
 @media (min-width: 650px) {
-
-
     /* Services Page */
     .service {
         display: flex;
@@ -446,6 +483,37 @@ svg {
     }
 
 
+    /* Appointments Page */
+    .appointments h5 {
+        display: inline;
+        margin-right: 2rem;
+    }
+
+    .appointment {
+        padding: 0.5rem 1rem;
+    }
+
+    .appointment-person, .appointment-time-date {
+        padding: 0.5rem 1rem;
+    }
+
+    .appointments {
+        margin-top: 0;
+    }
+
+    .selector {
+        padding-top: 0;
+        padding-bottom: 0.5rem;
+    }
+
+    .patient {
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 1rem;
+        border: 1px solid black;
+    }
+
+
     /* Contact Us Page */
     .clinic-details {
         display: grid;
@@ -465,7 +533,7 @@ svg {
         justify-content: space-between;
     }
 
-    
+
     /* Team Member Page */
     .team-member-container {
         display: grid;
@@ -486,6 +554,17 @@ svg {
     }
 
 
+    /* Booking Confirmation Dialog */
+    #booking-modal {
+        width: 80%;
+        height: 80%;
+    }
+
+    button#existing-patient, button#new-patient {
+        min-width: 40%;
+    }
+
+
     /* Appointments Page */
     .appointments-today {
         display: grid;
@@ -501,4 +580,26 @@ svg {
         display: grid;
         grid-template-columns: 1fr 1fr;
     }
+
+    .appointments {
+        margin-top: 0;
+    }
+
+    .selector {
+        padding-top: 0;
+        padding-bottom: 0.5rem;
+    }
+
+    #appointments-container.patient-view {
+        display: grid;
+        grid-template-columns: 0.4fr 0.6fr;
+    }
+
+    .patient {
+        margin: 0 0.5rem 0.5rem 0;
+        padding: 0.5rem;
+        border-radius: 1rem;
+        border: 1px solid black;
+    }
+
 }
