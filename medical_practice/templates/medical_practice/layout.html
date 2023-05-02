@@ -143,7 +143,7 @@
                             <p><strong>Time:</strong> </p> <p class="selected-time"></p>
                             <p><strong>Doctor:</strong> </p> <p class="selected-doctor"></p>
                             <br><br>
-                            <p><strong>Additional notes:</strong> </p> <textarea name="" id="" cols="30" rows="5"></textarea>
+                            <p><strong>Additional notes:</strong> </p> <textarea name="patient-notes" id="patient-notes" cols="30" rows="5"></textarea>
                             <br>
                             <button id="confirm-booking">Confirm booking</button>
                         </div>
@@ -170,26 +170,30 @@
                             <br>
                             <a href="{% url 'book' %}"><button id="book-now">Book Online</button></a>
                         </div>
-                        <div class="footer-contact">
-                            <h5>Contact Us</h5>
-                            <br>
-                            <h6>Contact Information</h6>
-                            <p>Phone: (00) 1234 5678</p>
-                            <p>Email: reception@capstonehealth.com</p>
-                            <br>
-                            <h6>Open Hours</h6>
-                            <p>Monday to Friday: 8am - 5pm</p>
-                            <p>Weekends and Public Holidays: 8am - 2pm</p>
-                        </div>
-                        <div class="footer-location">
-                            <h5>Find Us</h5>
-                            <br>
-                            <p>123 Fake Street, Oak Lawn, IL, USA</p>
-                            <div class="map">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2977.781401646108!2d-87.7512738232809!3d41.72523567125901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e3bd3bb6db18d%3A0x6582323d7a833d16!2s123%20Fake%20Street%2C%20Oak%20Lawn%2C%20IL%2060453%2C%20USA!5e0!3m2!1sen!2sar!4v1682361551488!5m2!1sen!2sar" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                        {% if not request.get_full_path == "/contact" %}
+                            <div class="footer-contact">
+                                <h5>Contact Us</h5>
+                                <br>
+                                <h6>Contact Information</h6>
+                                <p>Phone: (00) 1234 5678</p>
+                                <p>Email: reception@capstonehealth.com</p>
+                                <br>
+                                <h6>Open Hours</h6>
+                                <p>Monday to Friday: 8am - 5pm</p>
+                                <p>Weekends and Public Holidays: 8am - 2pm</p>
                             </div>
-                            <br>
-                        </div>
+                            <div class="footer-location">
+                                <h5>Find Us</h5>
+                                <br>
+                                <p>123 Fake Street, Oak Lawn, IL, USA</p>
+                                <div class="map">
+                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2977.781401646108!2d-87.7512738232809!3d41.72523567125901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e3bd3bb6db18d%3A0x6582323d7a833d16!2s123%20Fake%20Street%2C%20Oak%20Lawn%2C%20IL%2060453%2C%20USA!5e0!3m2!1sen!2sar!4v1682361551488!5m2!1sen!2sar" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                </div>
+                                <br>
+                            </div>
+                        {% endif %}
+
                     
                     </div>
                 {% endif %}

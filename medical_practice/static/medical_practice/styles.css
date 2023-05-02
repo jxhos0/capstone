@@ -21,13 +21,18 @@ call to action
 }
 
 main, #practice-summary {
-    width: 80%;
+    width: 95%;
     margin: 0 auto;
 }
 
 footer {
     margin-top: auto;
     width: 100%;
+}
+
+.footer-book, .footer-contact, .footer-location {
+    width: 100%;
+    margin-bottom: 1rem;
 }
 
 #copyright {
@@ -61,6 +66,10 @@ iframe {
 /* Services Page */
 #container-services {
     position: relative;
+    border: 1px solid black;
+    border-radius: 1rem;
+    overflow: hidden;
+    /* padding: 1rem; */
 }
 
 .service {
@@ -69,16 +78,22 @@ iframe {
 }
 
 .service-name {
-
     background: hsl(180, 6%, 83%);
+}
+
+.service-name p {
+    margin: 0.25rem 0 0.25rem 0.5rem;
 }
 
 .service-description {
     display: none;
+    background: white;
+    padding: 0.25rem 0.5rem;
 }
 
 .service-name.selected {
     background: white;
+    text-decoration: underline;
 }
 
 .service-description.selected {
@@ -158,6 +173,7 @@ iframe {
 
 .col {
     vertical-align: top;
+    padding: 1px 2px;
 }
 
 .timeslot {
@@ -177,10 +193,6 @@ iframe {
     font-weight: bold;
     border: none;
     margin: auto;
-}
-
-.hidden {
-    display: none;
 }
 
 .shaded {
@@ -231,6 +243,10 @@ button#confirm-booking {
     border-radius: .2rem;
 }
 
+.confirmed-booking {
+    text-align: center;
+}
+
 .existing-patient, .new-patient, .confirm-booking, .confirmed-booking {
     display: none;
 }
@@ -251,6 +267,7 @@ button#book-now {
     border-radius: 1.8rem;
     margin-left: 5%;   
 }
+
 
 /* Appointments Page */
 
@@ -365,35 +382,69 @@ svg {
 }
 
 .hidden {
-    visibility: hidden;
+    display: none;
 }
 
 
 /* Media Queries */
 @media (min-width: 650px) {
-    /* Layout */
-    main, #practice-summary {
-        width: 95%;
-    }
+
 
     /* Services Page */
     .service {
         display: flex;
+        background: hsl(180, 6%, 83%);
     }
     
     .service-name {
-        width: 30%;
+        position: relative;
+        width: 40%;
         background: hsl(180, 6%, 83%);
     }
     
     .service-description {
+        display: none;
         position: absolute;
         top: 0;
-        left: 30%;
-        display: none;
-        width: 70%;
+        left: 40%;
+        width: 60%;
         height: 100%;
+        padding: 0.25rem 1rem;
+        border-radius:  1rem 0 0 1rem;
+        z-index: 10;
     }
+
+    .service-name.selected, .service-name:hover {
+        text-decoration: none;
+        width: 100%;
+        background: white;
+        border-radius:  1rem 0 0 1rem;
+    }
+
+
+    .service .service-name.selected::before, .service .service-name:hover::before {
+        content: "";
+        position: absolute;
+        top: -1rem;
+        right: 60%;
+        width: 1rem;
+        height: 1rem;
+        border-bottom-right-radius: 10px;
+        box-shadow: 0 10px 0 0 white;
+    } 
+    
+    .service .service-name.selected::after, .service .service-name:hover::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        right: 60%;
+        width: 1rem;
+        height: 1rem;
+        border-top-right-radius: 0.5rem;
+        box-shadow: 0 -10px 0 0 white;
+        z-index: 10;
+    }
+
 
     /* Contact Us Page */
     .clinic-details {
@@ -404,11 +455,17 @@ svg {
 
 @media (min-width: 850px) {
     /* Layout */
-    #practice-summary {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+    main, #practice-summary {
+        width: 80%;
+        margin: 0 auto;
     }
 
+    #practice-summary {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    
     /* Team Member Page */
     .team-member-container {
         display: grid;
@@ -416,12 +473,18 @@ svg {
        
     }
 
+
     /* Booking Page */
     .doctor-schedule, .doctor-overview {
         display: grid;
         grid-template-columns: 0.3fr 0.7fr;
         gap: 1rem;
     }
+
+    .col {
+        padding: 0 0.5rem;
+    }
+
 
     /* Appointments Page */
     .appointments-today {

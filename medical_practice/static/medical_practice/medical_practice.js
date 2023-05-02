@@ -248,7 +248,6 @@ function render_bookings(data) {
             var doctor_id = timeslot.closest('.doctor-schedule').dataset.doctor_id;
             var doctor = document.querySelector(`[data-doctor_id='${doctor_id}']`).querySelector('.doctor-overview h5').innerText;
             var doctor_photo_html = document.querySelector(`[data-doctor_id='${doctor_id}']`).querySelector('.photo-container').innerHTML;
-            console.log(doctor_photo_html)
 
             render_booking_confirmation_dialog(time, date, doctor_id, doctor, doctor_photo_html);
         });
@@ -338,7 +337,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
         last_name = dialog.querySelector('form#login').querySelector('#last_name_login').value
 
         // Post the data to the server with CSRF Token
-        fetch('/login', {
+        fetch('/confirm-patient', {
             method: 'POST',
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             mode: 'same-origin',
@@ -370,7 +369,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
     });
 
     // Listen for submission of registration form
-    dialog.querySelector('form#register').querySelector('.btn').addEventListener('click', () => {
+    dialog.querySelector('form#dialog-register').querySelector('.btn').addEventListener('click', () => {
 
         first_name = dialog.querySelector('form#register').querySelector('#first_name_register').value;
         last_name = dialog.querySelector('form#register').querySelector('#last_name_register').value;
@@ -432,6 +431,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
                 doctor_id : doctor_id,
                 time : time,
                 date : date,
+                note : dialog.querySelector('#patient-notes').value
             })
         })
         .then((response) => {

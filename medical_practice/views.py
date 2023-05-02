@@ -139,9 +139,6 @@ def index(request):
 def services(request):
     services = Service.objects.all()
 
-    for service in services:
-        print(service.title)
-        
     return render(request, "medical_practice/services.html", {
         "services" : services
     })
@@ -254,13 +251,13 @@ def book_appointment(request):
     if request.method == "POST":
 
         data = json.loads(request.body)
-        # print(data)
 
         first_name = data["first_name"]
         last_name = data["last_name"]
         doctor_id = data['doctor_id']
         time = data['time']
         date = data['date']
+        patient_notes = data['note']
 
         doctor = Doctor.objects.get(pk=doctor_id)
 
@@ -268,7 +265,7 @@ def book_appointment(request):
             user = User.objects.get(first_name=first_name, last_name=last_name)
             patient = Patient.objects.get(user=user)
             
-            Appointment.objects.create(patient=patient, doctor=doctor, time=time, date=date).save()
+            Appointment.objects.create(patient=patient, doctor=doctor, time=time, date=date, patient_notes=patient_notes).save()
 
         return HttpResponse(status=200)
     else:
