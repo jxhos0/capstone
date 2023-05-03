@@ -1,2 +1,2 @@
-# capstone
-CS50w Capstone - Final Project
+# Capstone
+## CS50w Capstone - Final Project
