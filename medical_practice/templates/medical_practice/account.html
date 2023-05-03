@@ -4,8 +4,6 @@
 
     <h3>Account</h3>    
 
-    
-
     {% if request.user.is_doctor %}
         <h5>Today's Schedule</h5>
 
@@ -210,9 +208,6 @@
                     {% empty %}
                         <p>You have no upcoming appointments.</p>
                         <br>
-                        <!-- <p>If you need to book an appointment, click below!</p>
-                        <br>
-                        <a href="{% url 'book' %}"><button id="book-now">Book Online</button></a> -->
                     {% endfor %}
                 </div>
             
@@ -239,5 +234,5 @@
             </div>
         </div>
     {% endif %}
-
+    <br>
 {% endblock %}

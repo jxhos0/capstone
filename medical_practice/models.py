@@ -1,11 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from django.core.validators import RegexValidator, MinLengthValidator
-
 from datetime import date
-
-# Create your models here.
 
 class Service(models.Model):
     title       = models.CharField(max_length=32)
@@ -26,7 +22,7 @@ class User(AbstractUser):
     last_name   = models.CharField(max_length=32, blank=False, null=False)
     gender      = models.CharField(max_length=10, blank=False, null=False)
     dob         = models.DateField(max_length=8, blank=False, null=False)
-    phone       = models.CharField(max_length=16, blank=False, null=False)   #change regex here validators=[RegexValidator(r'^\d{3}-\d{3}-\d{4}$')]
+    phone       = models.CharField(max_length=16, blank=False, null=False)   
     email       = models.EmailField(max_length=254)
     is_doctor   = models.BooleanField(default=False)
 
@@ -37,10 +33,6 @@ class Patient(models.Model):
     user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patient')
     smokes      = models.CharField(max_length=15, choices=[('1', 'Yes'), ('2', 'No'), ('3', 'Occasionally'), ('4', 'Used to')], blank=True)
     drinks      = models.CharField(max_length=15, choices=[('1', 'Yes'), ('2', 'No'), ('3', 'Occasionally'), ('4', 'Used to')], blank=True)
-    # allergies     needs to be many field
-    # on_prescriptions
-    # past_surgeries needs to be many field
-    # family_medical_history
 
     def __str__(self) :
         return f'{self.user.first_name} {self.user.last_name}, DOB: {self.user.dob}, Phone: {self.user.phone}'
@@ -95,12 +87,5 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f'{self.patient.user.first_name} booked with Dr {self.doctor.user.last_name}, on {self.date} at {self.time}'
-  
-# DoctorSchedule.objects.create(doctor=Doctor.objects.get(pk=1), day='Wed', start_time=datetime.time(9, 0, 0), lunch=datetime.time(13, 0, 0), shift_duration=8)
-# Doctor(
-#     user = User.objects.get(username='mkhan'),
-#     qualifications='MD, MBA',
-#     languages='English, Urdu, Hindi',
-#     summary="Dr. Khan received his medical degree from the University of Michigan and completed his residency in Internal Medicine at the University of California, San Francisco. He also holds a Master of Business Administration from the Wharton School of the University of Pennsylvania. Dr. Khan is board certified in Internal Medicine and has a special interest in health policy and management."
-# ).save()
+
 

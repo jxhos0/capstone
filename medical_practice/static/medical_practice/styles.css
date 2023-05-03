@@ -1,12 +1,3 @@
-/* colours
-
-neutral
-primary
-call to action
-
-*/
-
-
 /* Layout */
 #content {
     min-height: 100vh;
@@ -15,9 +6,12 @@ call to action
     vertical-align: top;
 }
 
-.navbar {
-    padding-left: 10%;
-    padding-right: 10%;
+.ml-auto {
+    margin-left: 0!important;
+}
+
+.navbar-toggler {
+    margin: 0;
 }
 
 main, #practice-summary {
@@ -354,7 +348,7 @@ button#book-now {
 }
 
 .upcoming-appointments, .past-appointments {
-    max-height: calc(((127 / 16) * 1rem) * 5);
+    max-height: calc(((127 / 16) * 1rem) * 4);
     overflow: scroll;
 }
 
@@ -446,7 +440,7 @@ svg {
         left: 40%;
         width: 60%;
         height: 100%;
-        padding: 0.25rem 1rem;
+        padding: 1rem 1rem;
         border-radius:  1rem 0 0 1rem;
         z-index: 10;
     }
@@ -523,6 +517,19 @@ svg {
 
 @media (min-width: 850px) {
     /* Layout */
+    .navbar {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .nav-item {
+        text-align: center;
+    }    
+
+    .ml-auto {
+        margin-left: auto!important;
+    }
+
     main, #practice-summary {
         width: 80%;
         margin: 0 auto;

@@ -3,21 +3,18 @@
 {% block body %}
 
 <h4>Services</h4>    
-<br>
+
+<p>Capstone Health offers a range of medical services. See what we offer below!</p>
 
 <div id="container-services" >
-
-            
     {% for service in services %}
-
             {% if forloop.first %}
                 <div class="service">
                     <div id="{{ service.id }}" class="service-name selected"><p>{{ service.title }}</p></div>
                     <div class="service-description selected">
                         <p>{{ service.description }}</p>
                     </div>
-                </div>
-                
+                </div>  
             {% else %}
                 <div class="service">
                     <div id="{{ service.id }}" class="service-name"><p>{{ service.title }}</p></div>
@@ -26,29 +23,8 @@
                     </div>
                 </div>
             {% endif %}
-
     {% endfor %}
-    
-
-    
 </div>
 <br>
 
-<!-- <div id="container-services" class="span-2-cols">
-    <div class="services">
-        <ul>
-            {% for service in services %}
-                {% if forloop.first %}
-                    <li id="{{ service.id }}" class="selected">{{ service.title }}</li>
-                {% else %}
-                    <li id="{{ service.id }}">{{ service.title }}</li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="service-description">
-        <p>{{ services.0.description }}</p>
-    </div>
-</div>
-<br> -->
 {% endblock %}

@@ -1,13 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-    // console.log(document.activeElement)
-    // document.addEventListener('keydown', function(event) {
-    //     if (event.key  === 'Tab') {
-    //         console.log(document.activeElement)
-    //     }
-        
-    // })
-
     // Check user is on services page by searching for services div
     if (document.getElementById('container-services')) {
         // Get all services 
@@ -16,21 +7,23 @@ document.addEventListener('DOMContentLoaded', function() {
             service.querySelector('.service-name').addEventListener('click', () => {
                 // Run the load service function using the list element id
                 if (service.querySelector('.service-name').classList.contains('selected')) {
-                    console.log('selected')
+                    // Do nothing
                 } else {
+                    // Remove the selected class from any element with it
                     document.querySelectorAll('.selected').forEach(element => {
-                        element.classList.remove('selected')
-                    })
+                        element.classList.remove('selected');
+                    });
 
+                    // Add selected class to the service name and description element of the clicked service
                     service.querySelector('.service-name').classList.add('selected')
                     service.querySelector('.service-description').classList.add('selected')
-                }
-                // console.log(service.querySelector('.service-name').classList)
-            })
-        })
+                };
+            });
+        });
     } else if (document.getElementById('container-booking')) {
         // Load bookings for current week using date today as start date
-        load_bookings(new Date().toISOString());
+        var date = new Date().toISOString()
+        load_bookings(date);
 
         // Listen for load more bookings click
         document.querySelectorAll('.load_more_rows').forEach(load => {
@@ -45,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show all hidden timeslots
                 doctor_schedule.querySelectorAll('.timeslot.hidden').forEach(element => {
                     element.classList.remove('hidden');
-                })
+                });
             
                 // Hide the 'Show More' button
                 load.style.visibility = 'hidden';
@@ -81,62 +74,68 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     } else if (document.getElementById('appointments-container')) {
+        // Get elements with selector h5 class
         document.querySelectorAll('.selector h5').forEach(list => {
             list.addEventListener('click', () => {
+                // If clicked element doesn't have selected class
                 if (!list.classList.contains('selected')) {
                     document.querySelector('.selected').classList.remove('selected');
                     list.classList.add('selected');
 
+                    // Check what link was clicked on and show appropriate list of appointments
                     if (list.innerText === 'Upcoming Appointments') {
                         document.querySelector('.upcoming-appointments').style.display = 'block';
                         document.querySelector('.past-appointments').style.display = 'none';
                     } else {
                         document.querySelector('.upcoming-appointments').style.display = 'none';
-                        document.querySelector('.past-appointments').style.display = 'block';
-                        
+                        document.querySelector('.past-appointments').style.display = 'block';  
                     };
                 };
             });
         });
 
+        // Check if account is a doctor account
         if (!document.querySelector('.schedule-today p')) {
+            // Wait for click on an appointment in todays schedule
             document.querySelectorAll('.appointment').forEach(appointment => {
                 appointment.addEventListener('click', () => {
-    
+                    // Remove "No selected appointment" text from the appointment details div
                     document.querySelector('.no-selected-appointment').style.display = 'none';
 
+                    // If an appointment is already selected remove the selected class
                     if (document.querySelector('.appointment.selected')) {
-                        document.querySelector('.appointment.selected').classList.remove('selected')
-                    }
+                        document.querySelector('.appointment.selected').classList.remove('selected');
+                    };
 
-                    appointment.classList.add('selected')
+                    // Add the selected class to the new appointment
+                    appointment.classList.add('selected');
 
+                    // Get the appointment ID
                     var appointment_id = appointment.id;
     
+                    // Loop through the appointment details divs
                     document.querySelectorAll('.details').forEach(element => {
-    
+                        // Remove selected class (if exists) from details divs
                         if (element.classList.contains('active')) {
-                            element.classList.remove('active')
+                            element.classList.remove('active');
                         };
-    
+                        // If the details div has the same appointment ID add active class
                         if (element.id === appointment_id) {
-                            element.classList.add('active')
+                            element.classList.add('active');
                         };
                     });
 
+                    // Ensure all save buttons say "Save Notes"
                     document.querySelectorAll('.save-doctor-notes').forEach(button => {
-                        button.value = 'Save Notes'
-                    })
+                        button.value = 'Save Notes';
+                    });
                 });
             });
 
+            // Listen for a doctor to submit their appointment notes
             document.querySelectorAll('.save-doctor-notes').forEach(button => {
                 button.addEventListener('click', () => {
-                    // console.log(button.closest('.details').id)
-                    // console.log(button.closest('.doctor-notes').querySelector('#doctor-notes').value)
-                    // var appointment_id = button.closest('.details').id;
-                    // var doctor_notes = button.closest('.doctor-notes').querySelector('#doctor-notes').value;
-
+                    // Post the doctor notes to the database with CSRF token
                     fetch('/save_doctors_notes', {
                         method: 'POST',
                         headers: {'X-CSRFToken': getCookie('csrftoken')},
@@ -150,19 +149,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Check for HTTP Response
                         // If success code
                         if (response["status"] === 200) {
+                            // Change save button to "Saved"
                             button.value = 'Saved'
-            
-                        // If appointment booking already exists
-                        } else if (response["status"] === 409) {
-                            // INSERT ERROR MESSAGE
-                        };
+                        }; 
                     });
                 });
             });
-
         };
-
-
     };
 });
 
@@ -406,7 +399,12 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
     
             // If user is unauthorised
             } else if (response["status"] === 401) {
-                // INSERT ERROR MESSAGE authentication
+                dialog.querySelector('form#login').querySelector('#first_name_login').value = ''
+                dialog.querySelector('form#login').querySelector('#last_name_login').value = ''
+                dialog.querySelector('form#login').querySelector('#first_name_login').placeholder = 'Error: Please check the name and try again'
+                dialog.querySelector('form#login').querySelector('#last_name_login').placeholder = 'Error: Please check the name and try again'
+                dialog.querySelector('form#login').querySelector('#first_name_login').style.borderColor = 'red'
+                dialog.querySelector('form#login').querySelector('#last_name_login').style.borderColor = 'red'
             };
         });
     });
@@ -414,8 +412,8 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
     // Listen for submission of registration form
     dialog.querySelector('form#dialog-register').querySelector('.btn').addEventListener('click', () => {
 
-        first_name = dialog.querySelector('form#register').querySelector('#first_name_register').value;
-        last_name = dialog.querySelector('form#register').querySelector('#last_name_register').value;
+        first_name = dialog.querySelector('form#dialog-register').querySelector('#dialog_first_name_register').value;
+        last_name = dialog.querySelector('form#dialog-register').querySelector('#dialog_last_name_register').value;
            
         // Post the data to the server with CSRF Token
         fetch('/register', {
@@ -423,14 +421,14 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             mode: 'same-origin',
             body: JSON.stringify({
-                first_name      : dialog.querySelector('form#register').querySelector('#first_name_register').value,
-                last_name       : dialog.querySelector('form#register').querySelector('#last_name_register').value,
-                dob             : dialog.querySelector('form#register').querySelector('#dob').value,
-                gender          : dialog.querySelector('form#register').querySelector('#gender').value,
-                phone_number    : dialog.querySelector('form#register').querySelector('#phone_number').value,
-                email           : dialog.querySelector('form#register').querySelector('#email').value,
-                password        : dialog.querySelector('form#register').querySelector('#password').value,
-                confirmation    : dialog.querySelector('form#register').querySelector('#confirmation').value,
+                first_name      : dialog.querySelector('form#dialog-register').querySelector('#dialog_first_name_register').value,
+                last_name       : dialog.querySelector('form#dialog-register').querySelector('#dialog_last_name_register').value,
+                dob             : dialog.querySelector('form#dialog-register').querySelector('#dialog_dob').value,
+                gender          : dialog.querySelector('form#dialog-register').querySelector('#dialog_gender').value,
+                phone_number    : dialog.querySelector('form#dialog-register').querySelector('#dialog_phone_number').value,
+                email           : dialog.querySelector('form#dialog-register').querySelector('#dialog_email').value,
+                password        : dialog.querySelector('form#dialog-register').querySelector('#dialog_password').value,
+                confirmation    : dialog.querySelector('form#dialog-register').querySelector('#dialog_confirmation').value,
             })
         })
         .then((response) => {
@@ -454,7 +452,17 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
 
             // If patient already esxists
             } else if (response["status"] === 409) {
-                // INSERT ERROR MESSAGE account exists
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_first_name_register').value = ''
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_last_name_register').value = ''
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_dob').value = ''
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_gender').value = ''
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_phone_number').value = ''
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_email').value = ''
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_password').value = ''
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_confirmation').value = ''
+
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_email').placeholder = 'An account already exists with this email address.'
+                dialog.querySelector('form#dialog-register').querySelector('#dialog_email').style.borderColor = 'red'
             };
         });
     });
@@ -469,8 +477,6 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
             body: JSON.stringify({
                 first_name : first_name,
                 last_name : last_name,
-                // dob : dialog.querySelector('form#register').querySelector('#dob').value,
-                // gender : dialog.querySelector('form#register').querySelector('#gender').value,
                 doctor_id : doctor_id,
                 time : time,
                 date : date,
@@ -490,81 +496,14 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
 
             // If appointment booking already exists
             } else if (response["status"] === 409) {
-                // INSERT ERROR MESSAGE
+                back_arrow.style.visibility = 'hidden';
+                dialog.querySelector('.confirmed-booking').innerText = 'This booking is no longer available. Please return to the booking page and choose another timeslot.'
+                dialog.querySelector('.confirmed-booking').style.color = 'red'
+                dialog.querySelector('.confirmed-booking').style.display = 'block'
             };
         });
     })
 };
-
-// function login(dialog, current_element, recent_elements) {
-//     fetch('/login', {
-//         method: 'POST',
-//         headers: {'X-CSRFToken': getCookie('csrftoken')},
-//         mode: 'same-origin',
-//         body: JSON.stringify({
-//             first_name: dialog.querySelector('form#login').querySelector('#first_name_login').value,
-//             last_name: dialog.querySelector('form#login').querySelector('#last_name_login').value
-//         })
-//     })
-//     .then((response) => {
-//         if (response["status"] === 204) {
-//             current_element.style.display = 'none';
-//             recent_elements.push(current_element);
-
-//             current_element = dialog.querySelector('.confirm-booking');
-
-//             current_element.style.display = 'block';
-
-//             dialog.querySelector('.dialog-appointment-details').style.display = 'none';
-
-//             // console.log(recent_elements.innerHTML)
-//         } else if (response["status"] === 401) {
-//             // INSERT ERROR MESSAGE
-//         };
-//     });
-// };
-
-
-// function register_patient(dialog, current_element, recent_elements) {
-//     fetch('/register', {
-//         method: 'POST',
-//         headers: {'X-CSRFToken': getCookie('csrftoken')},
-//         mode: 'same-origin',
-//         body: JSON.stringify({
-//             first_name : dialog.querySelector('form#register').querySelector('#first_name_register').value,
-//             last_name : dialog.querySelector('form#register').querySelector('#last_name_register').value,
-//             dob : dialog.querySelector('form#register').querySelector('#dob').value,
-//             gender : dialog.querySelector('form#register').querySelector('#gender').value,
-//             phone_number : dialog.querySelector('form#register').querySelector('#phone_number').value,
-//             email : dialog.querySelector('form#register').querySelector('#email').value,
-//             password : dialog.querySelector('form#register').querySelector('#password').value,
-//             confirmation : dialog.querySelector('form#register').querySelector('#confirmation').value,
-//         })
-//     })
-//     .then((response) => {
-//         if (response["status"] === 204) {
-//             current_element.style.display = 'none';
-//             recent_elements.push(current_element);
-
-//             current_element = dialog.querySelector('.confirm-booking');
-
-//             current_element.style.display = 'block';
-
-//             dialog.querySelector('.appointment-details').style.display = 'none';
-
-//             // console.log(recent_elements.innerHTML)
-//         } else if (response["status"] === 401) {
-//             // INSERT ERROR MESSAGE
-//         } else if (response["status"] === 409) {
-//             // INSERT ERROR MESSAGE
-//         };
-//     });
-// };
-
-// function book_appointment(){
-
-// };
-
 
 // Function used to retrieve CSRF token. This code is from Django documentation.
 function getCookie(name) {
@@ -583,6 +522,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
+// Function for formatting time
 function ampm_time_format(time) {
     // Get hours and minutes as seperate variables
     hours = time.slice(0, 2)
@@ -596,64 +536,3 @@ function ampm_time_format(time) {
     // Return the formatted time
     return ampm_time
 }
-
-// function load_availability() {
-//     load_doctor_schedule()
-//     load_bookings()
-
-//     document.querySelectorAll('.availability').forEach(table => {
-        
-//         var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-//         let dateToday = new Date();
-//         let dayToday = dateToday.getDay();
-//         let currentMonth = dateToday.getMonth() + 1;
-        
-//         const dates = table.querySelector('.dates')
-//         const timeslots = table.querySelector('.timeslots')
-//         let datesHTML = ''
-//         let timesHTML = ''
-
-//         for (i = 0; i < 5; i++) {
-            
-//             var day = dayToday + i < 7 ? dayToday + i : dayToday + i - 7
-//             datesHTML += `
-//             <td>
-//                 ${days[day]}<br>
-//                 ${(dateToday.getDate() + i).toString().padStart(2, '0')}/${currentMonth.toString().padStart(2, '0')}
-//             </td>
-//             `
-
-//             var times = '';
-//             for(var j = 8 * 60; j<= 18 * 60; j+= 15){
-//                 hours = Math.floor(j/ 60);
-//                 if (hours < 10) {
-//                     hours = '0' + hours;
-//                 }
-//                 minutes = j% 60;
-//                 if (minutes < 10) {
-//                     minutes = '0' + minutes; // adding leading zero
-//                 }
-                
-//                 let ampm_time = hours > 12 ? hours - 12 + ":" + minutes + " PM" : hours + ":" + minutes + " AM"
-//                 if (j < 540 + 15 * 5) {
-//                     times += `<span class="timeslot" data-timeslot="${hours}${minutes}">${ampm_time}</span>`; 
-//                 } else {
-//                     times += `<span class="timeslot hidden" data-timeslot="${hours}${minutes}">${ampm_time}</span>`; 
-//                 }
-                
-//             }
-
-//             timesHTML += `
-//             <td data-date="${(dateToday.getDate() + i).toString().padStart(2, '0')}-${dateToday.getMonth()}-${dateToday.getFullYear()}">
-//                 ${times}
-//             </td>
-//             `
-//         }
-
-//         dates.innerHTML = datesHTML
-//         timeslots.innerHTML = timesHTML
-        
-//     })
-// }
-
