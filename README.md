@@ -8,7 +8,7 @@ Patients and doctors are both able to sign into their account, and are provided 
 ## Distinctiveness and Complexity
 While this project uses ideas and concepts from prior course submissions, it is an independent idea by istelf. 
 
-Capstone Health web app is different from the ecommerce or network apps as it is not used for selling or listing products, nor is it used for interacting with other uses in a social manner. It is a strictly professional app used for the organisation and storage of doctor, patient and appointment information in a database. I would not classify this as a simple app as it incorporates the use of Javascript and Python to work together for various requests and data handling, including GET and POST.
+Capstone Health web app is different from the e-commerce or network apps as it is not used for selling or listing products, nor is it used for interacting with other uses in a social manner. It is a strictly professional app used for the organisation and storage of doctor, patient and appointment information in a database. I would not classify this as a simple app as it incorporates the use of Javascript and Python to work together for various requests and data handling, including GET and POST.
 
 The project uses the Users model like a lot of the other course projects, however it instead of using this as a stand alone model; this model builds upon user data dependent on what type of account they have. In doing so the app is able to better store specific data related to each user without bloating the User database. 
 
@@ -28,7 +28,7 @@ The styles.css and medical_practice.js files are both located in this folder.
   An impoortant function that the medical_practice.js file is that of POST'ing data to the backend database with CSRF tokens. 
 
 ### Back End
-#### Models
+#### Models at ./medical_practice/models.py
 The models file contains six models that are used throughout the app. These models include:
 
 - Services: Contains the titles and descriptions of each service offered by Capstone Health.
@@ -38,7 +38,7 @@ The models file contains six models that are used throughout the app. These mode
 - Doctor Schedules: Listing the day, start, lunch and end time for each doctor.
 - Appointments: Links patients, doctors with a date, time and patient/doctor notes.
 
-#### Views
+#### Views at ./medical_practice/views.py
 The views.py file allows users to be created, checked, authenitcated, logged in and logged out. 
 
 It also handles the bulk of the work in regards to booking an appointment. It is responsible for taking the appointments and schedules models to create lists of available booking timeslots for each doctor, as well as checking if the appointment is still availble and confirming the appointment in the system.
@@ -47,6 +47,13 @@ It also handles the bulk of the work in regards to booking an appointment. It is
 The urls.py file is responsible for the directing of requests to the relevant functions for rendering data or pages.
 
 ## How to run the application
+To run the app the only Python package not included in a standard Python install is Django.
+
+To run the app please follow the below steps:
+
+- Run your virtual environment (if using one)
+- pip install -r requirements.txt (if you don't already have Django installed)
+- python manage.py runserver
 
 ## Additional Information
 To use the app without creating an account of your own you can use the below detials for a patient and doctor respectively.
