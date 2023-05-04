@@ -4,10 +4,11 @@
 
     <h3>Account</h3>    
 
+    <!-- DOCTOR HTML -->
     {% if request.user.is_doctor %}
         <h5>Today's Schedule</h5>
 
-        <div id="appointments-container" class="doctors-view">
+        <div id="accounts-container" class="doctors-view">
             <div class="appointments-today">
                 <div class="schedule-today">
                     {% for appointment in appointments_today %}
@@ -147,8 +148,11 @@
                 </div>
             </div>
         </div>
+
+
+    <!-- PATIENT HTML -->
     {% else %}
-        <div id="appointments-container" class="patient-view">
+        <div id="accounts-container" class="patient-view">
             <div class="patient">
                 <h5>Your Details</h5>
                 <div class="patient-name span-2-cols">

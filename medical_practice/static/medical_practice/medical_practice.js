@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Check user is on services page by searching for services div
+    // SERVICES PAGE
     if (document.getElementById('container-services')) {
         // Get all services 
         document.querySelectorAll('.service').forEach(service => {
@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
             });
         });
+
+
+    // BOOKINGS PAGE
     } else if (document.getElementById('container-booking')) {
         // Load bookings for current week using date today as start date
         var date = new Date().toISOString()
@@ -73,7 +76,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 load_bookings(new_week_start_date);
             });
         });
-    } else if (document.getElementById('appointments-container')) {
+
+
+    // ACCOUNTS PAGE
+    } else if (document.getElementById('accounts-container')) {
         // Get elements with selector h5 class
         document.querySelectorAll('.selector h5').forEach(list => {
             list.addEventListener('click', () => {
@@ -159,22 +165,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 });
 
-function load_service(service_id) {
-    // Remove the selected class from the already selected service
-    document.querySelector('.selected').classList.remove('selected');
 
-    // Add selected class to the newly selected service
-    document.getElementById(`${service_id}`).classList.add('selected');
-
-    // Fetch the description from the Django database
-    fetch(`/service/${service_id}`)
-    .then(response => response.json())
-    .then(service => {
-        // Set the service description to that of the selected service
-        document.querySelector('.service-description').innerText = service.description;
-    });
-};
-
+// Load bookings for 5 days including the requested date
 function load_bookings(dateString) {
     // Retrieve booking page data from database
     fetch(`/bookings/${dateString}`)
@@ -185,6 +177,8 @@ function load_bookings(dateString) {
     });
 };
 
+
+// Render the bookings page using the loaded bookings data
 function render_bookings(data) {
     // Set doctor ID
     let doctor_id = 1;
@@ -290,8 +284,9 @@ function render_bookings(data) {
     });
 };
 
-function render_booking_confirmation_dialog(time, date, doctor_id, doctor, doctor_photo_html) {
 
+// Render the booking confirmation dialog
+function render_booking_confirmation_dialog(time, date, doctor_id, doctor, doctor_photo_html) {
     // Set dialog and back arrow HTML elements as variable s
     let dialog = document.querySelector('#booking-modal');
     let back_arrow = dialog.querySelector('.back-dialog');
@@ -505,6 +500,7 @@ function render_booking_confirmation_dialog(time, date, doctor_id, doctor, docto
     })
 };
 
+
 // Function used to retrieve CSRF token. This code is from Django documentation.
 function getCookie(name) {
     let cookieValue = null;
@@ -521,6 +517,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 
 // Function for formatting time
 function ampm_time_format(time) {
